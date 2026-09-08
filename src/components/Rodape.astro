@@ -2,7 +2,8 @@
 import { site } from '../data/site';
 import { whatsappLink } from '../lib/whatsapp';
 const ano = new Date().getFullYear();
-const { direitos, responsavelTecnico } = site.secoes.rodape;
+const { ariaLabel, instagramLabel, whatsappLabel, direitos, responsavelTecnico } =
+  site.secoes.rodape;
 ---
 <footer id="rodape">
   <div class="container topo">
@@ -11,9 +12,9 @@ const { direitos, responsavelTecnico } = site.secoes.rodape;
       <p>{site.titulo}</p>
       <p class="cro">{site.cro}</p>
     </div>
-    <nav aria-label="Links do rodapé">
-      <a href={site.instagram} target="_blank" rel="noopener">Instagram {site.instagramHandle}</a>
-      <a href={whatsappLink('rodape')} target="_blank" rel="noopener">WhatsApp</a>
+    <nav aria-label={ariaLabel}>
+      <a href={site.instagram} target="_blank" rel="noopener">{instagramLabel} {site.instagramHandle}</a>
+      <a href={whatsappLink('rodape')} target="_blank" rel="noopener">{whatsappLabel}</a>
     </nav>
   </div>
   <div class="container base">

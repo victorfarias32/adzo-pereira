@@ -23,7 +23,7 @@ describe('whatsappLink', () => {
   });
 
   it('cobre todas as origens sem retornar mensagem vazia', () => {
-    const origens = ['header', 'hero', 'urgencia', 'faq', 'rodape', 'flutuante'] as const;
+    const origens = ['header', 'hero', 'urgencia', 'faq', 'localizacao', 'rodape', 'flutuante'] as const;
     for (const o of origens) {
       const texto = decodeURIComponent(whatsappLink(o).replace(BASE, ''));
       expect(texto.length).toBeGreaterThan(20);
@@ -32,7 +32,7 @@ describe('whatsappLink', () => {
   });
 
   it('gera mensagem distinta para cada origem', () => {
-    const origens = ['header', 'hero', 'urgencia', 'faq', 'rodape', 'flutuante'] as const;
+    const origens = ['header', 'hero', 'urgencia', 'faq', 'localizacao', 'rodape', 'flutuante'] as const;
     const links = origens.map((o) => whatsappLink(o));
     expect(new Set(links).size).toBe(origens.length);
   });

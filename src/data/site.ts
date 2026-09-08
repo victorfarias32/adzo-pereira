@@ -63,6 +63,9 @@ export const site = {
       mapaTitulo: 'Mapa do consultório',
     },
     rodape: {
+      ariaLabel: 'Links do rodapé',
+      instagramLabel: 'Instagram',
+      whatsappLabel: 'WhatsApp',
       direitos: 'Todos os direitos reservados.',
       responsavelTecnico: 'Responsável técnico:',
     },

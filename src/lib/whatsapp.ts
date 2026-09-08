@@ -9,6 +9,7 @@ export type CtaOrigin =
   | 'hero'
   | 'urgencia'
   | 'faq'
+  | 'localizacao'
   | 'rodape'
   | 'flutuante';
 
@@ -24,6 +25,8 @@ const MENSAGENS: Record<CtaOrigin, string> = {
   urgencia:
     'Olá, Dr. Adzo! Estou com dor de dente e preciso de atendimento com urgência.',
   faq: 'Olá, Dr. Adzo! Li as perguntas frequentes do site e ficou uma dúvida.',
+  localizacao:
+    'Olá, Dr. Adzo! Vi o endereço e os horários no site e quero combinar um horário.',
   rodape: 'Olá, Dr. Adzo! Vim pelo site e tenho uma dúvida.',
 };
 
