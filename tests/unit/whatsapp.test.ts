@@ -30,6 +30,12 @@ describe('whatsappLink', () => {
       expect(texto).toContain('Dr. Adzo');
     }
   });
+
+  it('gera mensagem distinta para cada origem', () => {
+    const origens = ['header', 'hero', 'urgencia', 'faq', 'rodape', 'flutuante'] as const;
+    const links = origens.map((o) => whatsappLink(o));
+    expect(new Set(links).size).toBe(origens.length);
+  });
 });
 
 describe('whatsappLinkTratamento', () => {

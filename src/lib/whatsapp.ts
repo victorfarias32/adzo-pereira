@@ -18,11 +18,12 @@ export type CtaOrigin =
  */
 const MENSAGENS: Record<CtaOrigin, string> = {
   header: 'Olá, Dr. Adzo! Vim pelo site e gostaria de agendar uma avaliação.',
-  flutuante: 'Olá, Dr. Adzo! Vim pelo site e gostaria de agendar uma avaliação.',
+  flutuante:
+    'Olá, Dr. Adzo! Estava navegando no site e quero agendar uma avaliação.',
   hero: 'Olá, Dr. Adzo! Vim pelo site e quero marcar uma consulta.',
   urgencia:
     'Olá, Dr. Adzo! Estou com dor de dente e preciso de atendimento com urgência.',
-  faq: 'Olá, Dr. Adzo! Vim pelo site e tenho uma dúvida.',
+  faq: 'Olá, Dr. Adzo! Li as perguntas frequentes do site e ficou uma dúvida.',
   rodape: 'Olá, Dr. Adzo! Vim pelo site e tenho uma dúvida.',
 };
 
