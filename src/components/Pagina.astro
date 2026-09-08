@@ -8,6 +8,10 @@ import Quiz from './Quiz.astro';
 import Resultados from './Resultados.astro';
 import Sobre from './Sobre.astro';
 import PrimeiraConsulta from './PrimeiraConsulta.astro';
+import Faq from './Faq.astro';
+import Localizacao from './Localizacao.astro';
+import Rodape from './Rodape.astro';
+import WhatsFlutuante from './WhatsFlutuante.astro';
 import type { Variant } from '../data/palettes';
 
 interface Props { variant: Variant }
@@ -23,5 +27,8 @@ const { variant } = Astro.props;
   <Resultados variant={variant} />
   <Sobre />
   <PrimeiraConsulta />
-  <!-- Task 8: Faq, Localizacao, Rodape, WhatsFlutuante -->
+  <Faq />
+  <Localizacao />
 </main>
+<Rodape />
+<WhatsFlutuante />

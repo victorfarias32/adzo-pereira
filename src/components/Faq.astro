@@ -1,0 +1,45 @@
+---
+import { site } from '../data/site';
+import { whatsappLink } from '../lib/whatsapp';
+
+const { olho, titulo, mais, cta } = site.secoes.faq;
+---
+<section id="duvidas" class="secao faq">
+  <div class="container caixa">
+    <p class="olho">{olho}</p>
+    <h2>{titulo}</h2>
+    {site.faq.map((item) => (
+      <details name="faq">
+        <summary>{item.pergunta}</summary>
+        <div class="resposta"><p>{item.resposta}</p></div>
+      </details>
+    ))}
+    <p class="mais">
+      {mais}
+      <a href={whatsappLink('faq')} target="_blank" rel="noopener">{cta}</a>.
+    </p>
+  </div>
+</section>
+
+<style>
+  .faq { background: var(--c-surfaceAlt); }
+  .caixa { max-width: 760px; }
+  .olho { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c-muted); }
+  h2 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin: .5rem 0 2rem; }
+  details { border-bottom: 1px solid var(--c-line); background: transparent; }
+  summary {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 1.15rem 0; min-height: 44px;
+    font-weight: 600; font-size: 1.02rem; cursor: pointer; list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '+'; font-size: 1.5rem; line-height: 1;
+    color: var(--c-primary); transition: transform .2s ease; flex: none;
+  }
+  details[open] summary::after { transform: rotate(45deg); }
+  .resposta { padding-bottom: 1.3rem; }
+  .resposta p { color: var(--c-muted); font-size: .96rem; }
+  .mais { margin-top: 2rem; color: var(--c-muted); }
+  .mais a { color: var(--c-primary); font-weight: 600; }
+</style>

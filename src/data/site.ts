@@ -46,6 +46,29 @@ export const site = {
     primeiraConsulta: {
       olho: 'Sem surpresa',
     },
+    faq: {
+      olho: 'Perguntas frequentes',
+      titulo: 'O que as pessoas mais me perguntam',
+      mais: 'Ficou outra dúvida?',
+      cta: 'Me pergunte no WhatsApp',
+    },
+    localizacao: {
+      olho: 'Onde me encontrar',
+      rotulos: {
+        endereco: 'Endereço',
+        horarios: 'Horários',
+        cidade: 'Cidade',
+      },
+      cta: 'Combinar um horário',
+      mapaTitulo: 'Mapa do consultório',
+    },
+    rodape: {
+      direitos: 'Todos os direitos reservados.',
+      responsavelTecnico: 'Responsável técnico:',
+    },
+    whatsFlutuante: {
+      ariaLabel: 'Falar com o Dr. Adzo no WhatsApp',
+    },
   },
 
   hero: {

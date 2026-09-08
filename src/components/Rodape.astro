@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+import { whatsappLink } from '../lib/whatsapp';
+const ano = new Date().getFullYear();
+const { direitos, responsavelTecnico } = site.secoes.rodape;
+---
+<footer id="rodape">
+  <div class="container topo">
+    <div>
+      <strong>{site.nome}</strong>
+      <p>{site.titulo}</p>
+      <p class="cro">{site.cro}</p>
+    </div>
+    <nav aria-label="Links do rodapé">
+      <a href={site.instagram} target="_blank" rel="noopener">Instagram {site.instagramHandle}</a>
+      <a href={whatsappLink('rodape')} target="_blank" rel="noopener">WhatsApp</a>
+    </nav>
+  </div>
+  <div class="container base">
+    <p>© {ano} {site.nome}. {direitos}</p>
+    <p>{responsavelTecnico} {site.nome} — {site.cro}</p>
+  </div>
+</footer>
+
+<style>
+  footer { background: var(--c-surfaceAlt); border-top: 1px solid var(--c-line); padding-block: 3rem 1.5rem; }
+  .topo { display: grid; gap: 2rem; padding-bottom: 2rem; }
+  @media (min-width: 700px) { .topo { grid-template-columns: 1fr auto; align-items: start; } }
+  .topo strong { font-family: var(--f-titulo); font-size: 1.25rem; }
+  .topo p { color: var(--c-muted); font-size: .92rem; }
+  .cro { font-size: .8rem !important; letter-spacing: .06em; }
+  nav { display: grid; gap: .6rem; }
+  nav a { color: var(--c-primary); font-weight: 600; font-size: .92rem; text-decoration: none; }
+  nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .base {
+    display: grid; gap: .4rem; border-top: 1px solid var(--c-line);
+    padding-top: 1.5rem; font-size: .78rem; color: var(--c-muted);
+  }
+</style>
