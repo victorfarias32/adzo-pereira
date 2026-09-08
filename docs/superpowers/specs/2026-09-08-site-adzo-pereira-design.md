@@ -208,11 +208,13 @@ adzo-pereira/
 │   │       ├── b.astro         # Direção B
 │   │       └── c.astro         # Direção C
 │   ├── data/
-│   │   └── site.ts       # ÚNICA fonte de conteúdo (textos, WhatsApp, serviços, FAQ)
+│   │   ├── site.ts       # ÚNICA fonte de conteúdo (textos, serviços, FAQ)
+│   │   └── palettes.ts   # ÚNICA fonte das paletas e fontes das 3 direções
+│   ├── lib/
+│   │   ├── whatsapp.ts   # ÚNICO lugar com o número; monta os links por origem
+│   │   └── contrast.ts   # razão de contraste WCAG, usada no teste das paletas
 │   └── styles/
-│       ├── tokens-a.css  # tokens da Direção A
-│       ├── tokens-b.css
-│       └── tokens-c.css
+│       └── global.css    # reset e utilitários; tokens vêm de palettes.ts
 ├── docs/superpowers/specs/
 └── astro.config.mjs
 ```
@@ -224,8 +226,11 @@ adzo-pereira/
   texto próprio. Corrigir uma vírgula corrige nas três.
 - **Ordem e presença das seções: 100% compartilhada.** As três direções têm as
   mesmas 12 seções da §3, na mesma ordem.
-- **Cor, tipografia, raio, sombra, escala de espaçamento: por direção**, via
-  `tokens-{a,b,c}.css`. É aqui que mora a maior parte da diferença.
+- **Cor, tipografia, raio, sombra, escala de espaçamento: por direção**, declaradas
+  em `src/data/palettes.ts` e emitidas como CSS custom properties pelo layout base.
+  É aqui que mora a maior parte da diferença. Manter as paletas em TypeScript — e não
+  em arquivos CSS — permite que o mesmo objeto alimente os tokens da página, o teste
+  automático de contraste AA e as amostras de cor da apresentação ao cliente.
 - **Layout interno de seção: por direção quando necessário.** As direções B e C
   não são reskins da A — B usa grid assimétrico no hero e nos resultados, C usa
   cards mais densos no quiz e no FAQ. Onde a estrutura realmente muda, o componente
