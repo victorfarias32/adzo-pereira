@@ -1,0 +1,49 @@
+---
+import { site } from '../data/site';
+import { whatsappLinkTratamento } from '../lib/whatsapp';
+import type { Variant } from '../data/palettes';
+
+interface Props { variant: Variant }
+const { variant } = Astro.props;
+---
+<section id="tratamentos" class:list={['secao', `v-${variant}`]}>
+  <div class="container">
+    <p class="olho">O que eu faço</p>
+    <h2>Tratamentos</h2>
+    <div class="grade">
+      {site.tratamentos.map((t) => (
+        <article class:list={['card', { destaque: t.destaque }]}>
+          <h3>{t.nome}</h3>
+          <p>{t.descricao}</p>
+          <a href={whatsappLinkTratamento(t.nome)} target="_blank" rel="noopener">
+            Falar sobre {t.nome.toLowerCase()}
+            <span aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .olho { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c-muted); }
+  h2 { font-size: clamp(1.9rem, 5vw, 2.9rem); margin: .5rem 0 2.5rem; }
+  .grade { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }
+  .card {
+    display: flex; flex-direction: column; gap: .8rem;
+    padding: 1.9rem; border: 1px solid var(--c-line); border-radius: 1.1rem;
+    background: var(--c-surface); transition: border-color .2s ease, transform .2s ease;
+  }
+  .card:hover { border-color: var(--c-primary); transform: translateY(-3px); }
+  .card h3 { font-size: 1.3rem; }
+  .card p { color: var(--c-muted); font-size: .95rem; flex: 1; }
+  .card a {
+    display: inline-flex; align-items: center; gap: .4rem;
+    color: var(--c-primary); font-weight: 600; font-size: .92rem; text-decoration: none;
+  }
+  .card a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .destaque { grid-column: span 1; border-color: var(--c-primary); border-width: 2px; }
+  @media (min-width: 900px) { .destaque { grid-column: span 2; } }
+  .v-c .card { border-radius: 1.75rem; }
+  .v-b .card { border-radius: 0; }
+</style>

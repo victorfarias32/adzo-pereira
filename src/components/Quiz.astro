@@ -1,0 +1,69 @@
+---
+import { site } from '../data/site';
+import { whatsappLinkQuiz } from '../lib/whatsapp';
+
+// Link de fallback caso o JS não execute: leva ao WhatsApp sem sintomas.
+const fallback = whatsappLinkQuiz([]);
+---
+<section id="quiz" class="secao quiz">
+  <div class="container caixa">
+    <h2>{site.quiz.titulo}</h2>
+    <p class="instrucao">{site.quiz.instrucao}</p>
+
+    <fieldset id="quiz-campos">
+      <legend class="sr-only">{site.quiz.instrucao}</legend>
+      {site.quiz.sintomas.map((s, i) => (
+        <label class="opcao">
+          <input type="checkbox" value={s} id={`sintoma-${i}`} />
+          <span>{s}</span>
+        </label>
+      ))}
+    </fieldset>
+
+    <p class="aviso" role="note">{site.quiz.aviso}</p>
+
+    <a id="quiz-cta" href={fallback} target="_blank" rel="noopener" class="btn">
+      {site.quiz.cta}
+    </a>
+  </div>
+</section>
+
+<script>
+  import { whatsappLinkQuiz } from '../lib/whatsapp';
+
+  const campos = document.getElementById('quiz-campos');
+  const cta = document.getElementById('quiz-cta') as HTMLAnchorElement | null;
+
+  if (campos && cta) {
+    const atualizar = () => {
+      const marcados = Array.from(
+        campos.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked'),
+      ).map((el) => el.value);
+      cta.href = whatsappLinkQuiz(marcados);
+    };
+    campos.addEventListener('change', atualizar);
+  }
+</script>
+
+<style>
+  .quiz { background: var(--c-surfaceAlt); }
+  .caixa { max-width: 680px; }
+  h2 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); margin-bottom: .6rem; }
+  .instrucao { color: var(--c-muted); margin-bottom: 1.6rem; }
+  fieldset { border: 0; padding: 0; display: grid; gap: .7rem; margin-bottom: 1.5rem; }
+  .opcao {
+    display: flex; align-items: flex-start; gap: .85rem;
+    padding: .95rem 1.15rem; min-height: 44px;
+    background: var(--c-surface); border: 1px solid var(--c-line);
+    border-radius: .8rem; cursor: pointer; transition: border-color .18s ease;
+  }
+  .opcao:hover, .opcao:focus-within { border-color: var(--c-primary); }
+  .opcao input { width: 20px; height: 20px; margin-top: .18rem; accent-color: var(--c-primary); flex: none; }
+  .aviso { font-size: .84rem; color: var(--c-muted); font-style: italic; margin-bottom: 1.6rem; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: .95rem 1.6rem; border-radius: 999px;
+    background: var(--c-primary); color: var(--c-onPrimary);
+    font-weight: 600; text-decoration: none;
+  }
+</style>

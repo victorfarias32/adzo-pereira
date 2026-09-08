@@ -3,6 +3,8 @@ import Header from './Header.astro';
 import Hero from './Hero.astro';
 import Credenciais from './Credenciais.astro';
 import Urgencia from './Urgencia.astro';
+import Tratamentos from './Tratamentos.astro';
+import Quiz from './Quiz.astro';
 import type { Variant } from '../data/palettes';
 
 interface Props { variant: Variant }
@@ -13,7 +15,8 @@ const { variant } = Astro.props;
   <Hero variant={variant} />
   <Credenciais />
   <Urgencia />
-  <!-- Task 6: Tratamentos, Quiz -->
+  <Tratamentos variant={variant} />
+  <Quiz />
   <!-- Task 7: Resultados, Sobre, PrimeiraConsulta -->
   <!-- Task 8: Faq, Localizacao, Rodape, WhatsFlutuante -->
 </main>
