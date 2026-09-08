@@ -2153,21 +2153,20 @@ git push
 
 **Interfaces:**
 - Consumes: build da Task 9
-- Produces: os 3 protótipos verificados e publicados na Vercel
+- Produces: o site verificado e publicado na Vercel
 
 **Sobre o deploy:** o repositório já está conectado à Vercel pelo parceiro humano, então **cada push para `main` publica sozinho**. Não existe passo de deploy manual nesta task, e o executor não deve rodar a CLI da Vercel nem tentar autenticar — não tem credencial e não precisa. Seu trabalho aqui é medir e corrigir; publicar é consequência do push.
 
 Tentou-se GitHub Pages antes, para que o agente pudesse publicar sozinho. Foi revertido: o Pages serve em `/adzo-pereira`, e o subcaminho exigiria `base` no Astro mais `import.meta.env.BASE_URL` em todo caminho absoluto, sem ganho nenhum sobre a Vercel já conectada.
 
-- [ ] **Step 1: Rodar Lighthouse mobile nas três páginas**
+- [ ] **Step 1: Rodar Lighthouse mobile na página**
 
 ```bash
 npm run build && npx --yes serve dist -p 4173 &
-npx --yes lighthouse http://localhost:4173/prototipo/a   --form-factor=mobile --throttling-method=simulate   --only-categories=performance,accessibility,best-practices,seo   --output=json --output-path=./lh-a.json --chrome-flags="--headless"
+npx --yes lighthouse http://localhost:4173/   --form-factor=mobile --throttling-method=simulate   --only-categories=performance,accessibility,best-practices,seo   --output=json --output-path=./lh-a.json --chrome-flags="--headless"
 ```
 
-Repita para `/prototipo/b` e `/prototipo/c`.
-Expected: as 4 categorias ≥ 95 em cada página.
+Expected: as 4 categorias ≥ 95.
 
 Os arquivos `lh-*.json` são temporários — não os commite. Acrescente `lh-*.json` ao `.gitignore` se atrapalharem.
 
@@ -2175,44 +2174,39 @@ Os arquivos `lh-*.json` são temporários — não os commite. Acrescente `lh-*.
 
 Ordem de ataque, da causa mais provável para a menos:
 1. **Fontes do Google CDN** derrubando o LCP → baixe os `.woff2` para `public/fonts/`, declare `@font-face` com `font-display: swap` em `global.css`, remova os `<link>` do Google em `Base.astro` e adicione `<link rel="preload" as="font" type="font/woff2" crossorigin>` para a fonte de título.
-2. **Contraste** apontado pelo Lighthouse na direção B → o teste da Task 3 só cobre os pares declarados; adicione o par faltante a `paresDeTexto` e ajuste o hex até o teste passar.
+2. **Contraste** apontado pelo Lighthouse → o teste da Task 3 só cobre os pares declarados; adicione o par faltante a `paresDeTexto` da direção A e ajuste o hex até o teste passar.
 3. **Imagem do hero** sem dimensão reservada → confirme que `<Image>` do `astro:assets` está emitindo `width`/`height`.
 
 Rode o Lighthouse de novo após cada correção.
 
 - [ ] **Step 3: Verificar acessibilidade por teclado manualmente**
 
-Com o `npm run preview` aberto, percorra `/prototipo/a` só de `Tab`:
+Com o `npm run preview` aberto, percorra a página só de `Tab`:
 - O primeiro foco é "Pular para o conteúdo" e ele funciona.
 - Todo `<summary>` do FAQ abre com `Enter` e `Espaço`.
 - Todo checkbox do quiz é alcançável e marca com `Espaço`.
-- O anel de foco é visível em todos os elementos, inclusive sobre o fundo escuro da direção B.
+- O anel de foco é visível em todos os elementos.
 - O botão flutuante é alcançável.
 
 Corrija o que falhar antes de seguir.
 
 - [ ] **Step 4: Verificar em 375px**
 
-Nas três páginas, com o devtools em 375×812: nenhum scroll horizontal, nenhum texto cortado, o botão flutuante não cobre nenhum CTA.
+Com o devtools em 375×812: nenhum scroll horizontal, nenhum texto cortado, o botão flutuante não cobre nenhum CTA.
 
 - [ ] **Step 5: Commit e push**
 
 ```bash
 git add -A
-git commit -m "chore: ajustes de performance e acessibilidade nos protótipos"
+git commit -m "chore: ajustes de performance e acessibilidade"
 git push
 ```
 
 O push dispara o deploy da Vercel automaticamente.
 
-- [ ] **Step 6: Confirmar os protótipos no ar**
+- [ ] **Step 6: Confirmar o site no ar**
 
-Peça ao parceiro humano a URL de produção da Vercel (o executor não tem acesso ao painel). Com ela, confira `/`, `/prototipo/a`, `/b` e `/c`:
-- O CSS carregou e as imagens aparecem nas três páginas.
-- Os links do índice levam aos protótipos.
-- Um CTA de WhatsApp abre o app com a mensagem correta já escrita.
-
-Anote a URL — a Task 11 precisa dela para os botões da apresentação.
+Em `https://adzo-pereira.vercel.app/`: o CSS carregou, as imagens aparecem, e um CTA de WhatsApp abre o app com a mensagem correta já escrita.
 
 ---
 
@@ -2262,12 +2256,14 @@ Os componentes em si são independentes — é só o arquivo de composição que
 
 ## Se o cliente quiser outra direcao depois
 
-Quando o Dr. Adzo escolher a direção:
+As paletas B e C continuam em `src/data/palettes.ts`, cobertas pelo teste de contraste.
+Trocar a cara do site e mudar `variant="a"` para `"b"` ou `"c"` nos dois pontos de
+`src/pages/index.astro`. Os componentes com estilo por direcao (`Hero`, `Tratamentos`,
+`Resultados`) ja ramificam sozinhos.
 
-1. Substituir `src/pages/index.astro` pelo conteúdo de `src/pages/prototipo/<escolhida>.astro`.
-2. Apagar as outras duas páginas de protótipo e os tokens das paletas não escolhidas.
-3. Ajustar `tests/build/*.test.ts` para varrer só `dist/index.html`.
-4. Preencher os `[[PENDENTE]]` de `src/data/site.ts` com o conteúdo real.
-5. Adicionar `streetAddress`, `postalCode` e `openingHours` ao JSON-LD.
-6. Rodar `npm test && npm run test:build` — o teste de placeholders da Task 2 precisa ser invertido nesta fase para **falhar** se `[[PENDENTE]]` ainda existir.
-7. Se houver domínio próprio: apontar o DNS para a Vercel pelo painel dela e atualizar `site` em `astro.config.mjs` para o domínio novo.
+## Quando o conteudo pendente chegar
+
+1. Preencher os `[[PENDENTE]]` de `src/data/site.ts` com o conteudo real.
+2. Acrescentar `streetAddress`, `postalCode` e `openingHours` ao JSON-LD em `SchemaDentist.astro`.
+3. Inverter o teste de pendentes: deve passar a **falhar** se `[[PENDENTE]]` ainda existir.
+4. Se houver dominio proprio: apontar o DNS na Vercel e atualizar `site` em `astro.config.mjs`.

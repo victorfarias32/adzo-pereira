@@ -1,0 +1,60 @@
+---
+import { palettes, type Variant } from '../data/palettes';
+import SchemaDentist from '../components/SchemaDentist.astro';
+import '../styles/global.css';
+
+interface Props {
+  variant: Variant;
+  titulo: string;
+  descricao: string;
+}
+
+const { variant, titulo, descricao } = Astro.props;
+const p = palettes[variant];
+
+const vars = Object.entries(p.tokens)
+  .map(([nome, valor]) => `--c-${nome}: ${valor};`)
+  .join('\n    ');
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og-image.jpg', Astro.site).href;
+
+const fontesGoogle = [p.fontes.titulo, p.fontes.corpo]
+  .map((f) => `family=${f.replace(/ /g, '+')}:wght@400;500;600;700`)
+  .join('&');
+---
+<!doctype html>
+<html lang="pt-BR" data-variant={variant}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?${fontesGoogle}&display=swap`} />
+
+    <style is:inline set:html={`:root {
+    ${vars}
+    --f-titulo: '${p.fontes.titulo}';
+    --f-corpo: '${p.fontes.corpo}';
+  }`} />
+
+    <SchemaDentist />
+  </head>
+  <body>
+    <a href="#conteudo" class="sr-only">Pular para o conteúdo</a>
+    <slot />
+  </body>
+</html>

@@ -1,6 +1,42 @@
 ---
+import { palettes } from '../data/palettes';
+import '../styles/global.css';
+
+const opcoes = (['a', 'b', 'c'] as const).map((v) => ({ v, ...palettes[v] }));
 ---
+<!doctype html>
 <html lang="pt-BR">
-  <head><meta charset="utf-8" /><title>Dr. Adzo Pereira</title></head>
-  <body><p>Em construção.</p></body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dr. Adzo Pereira — 3 propostas de site</title>
+    <meta name="description" content="Três direções visuais propostas para o site do Dr. Adzo Pereira, especialista em endodontia em Recife." />
+    <meta name="robots" content="noindex" />
+    <style is:inline>
+      :root { --c-surface: #FBF9F6; --c-ink: #12303F; --c-muted: #5C6B73; --c-primary: #1B5A7A; --c-line: #DED5C8; --f-titulo: Georgia; --f-corpo: system-ui; }
+    </style>
+  </head>
+  <body>
+    <main class="container" style="padding-block: 4rem;">
+      <p style="letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;color:var(--c-muted)">Proposta de site</p>
+      <h1 style="font-size:clamp(2rem,5vw,3rem);margin:.5rem 0 1rem">Dr. Adzo Pereira</h1>
+      <p style="color:var(--c-muted);margin-bottom:3rem">
+        Três direções visuais com o mesmo conteúdo e a mesma estrutura. Abra cada uma no celular e escolha a que mais representa o seu consultório.
+      </p>
+      <div style="display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))">
+        {opcoes.map((o) => (
+          <a href={`/prototipo/${o.v}`} style="display:block;padding:1.9rem;border:1px solid var(--c-line);border-radius:1.1rem;text-decoration:none;color:inherit">
+            <div style="display:flex;gap:.4rem;margin-bottom:1.1rem">
+              {Object.values(o.tokens).slice(0, 6).map((cor) => (
+                <span style={`width:26px;height:26px;border-radius:50%;background:${cor};border:1px solid rgb(0 0 0 / .08)`}></span>
+              ))}
+            </div>
+            <strong style="display:block;font-size:1.25rem;margin-bottom:.5rem">Opção {o.v.toUpperCase()} — {o.nome}</strong>
+            <p style="color:var(--c-muted);font-size:.93rem">{o.descricao}</p>
+            <span style="display:inline-block;margin-top:1rem;color:var(--c-primary);font-weight:600">Ver esta versão →</span>
+          </a>
+        ))}
+      </div>
+    </main>
+  </body>
 </html>

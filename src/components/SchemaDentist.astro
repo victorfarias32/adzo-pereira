@@ -1,0 +1,21 @@
+---
+import { site } from '../data/site';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Dentist',
+  name: site.nome,
+  description: `${site.titulo}. ${site.cro}.`,
+  medicalSpecialty: 'Endodontic',
+  telephone: '+55 81 99874-2330',
+  areaServed: 'Recife, PE, Brasil',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Recife',
+    addressRegion: 'PE',
+    addressCountry: 'BR',
+  },
+  sameAs: [site.instagram],
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />

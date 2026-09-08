@@ -1,0 +1,15 @@
+---
+import type { Variant } from '../data/palettes';
+
+interface Props { variant: Variant }
+const { variant } = Astro.props;
+---
+<main id="conteudo">
+  <!-- Task 5: Header, Hero, Credenciais, Urgencia -->
+  <!-- Task 6: Tratamentos, Quiz -->
+  <!-- Task 7: Resultados, Sobre, PrimeiraConsulta -->
+  <!-- Task 8: Faq, Localizacao, Rodape, WhatsFlutuante -->
+  <p style="padding:4rem 1.5rem;text-align:center;color:var(--c-muted)">
+    Direção <strong>{variant.toUpperCase()}</strong> — seções em construção.
+  </p>
+</main>
