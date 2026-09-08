@@ -47,7 +47,7 @@ azul-petróleo, nome em script serifado, subtítulo em sans caixa-alta espaçada
 | Decisão | Escolha | Motivo |
 |---|---|---|
 | Stack | **Astro** | Gera HTML estático puro; sem JS de framework no cliente. Componentização e SEO built-in. |
-| Hospedagem | **Vercel** | Deploy automático por push, HTTPS e domínio grátis. |
+| Hospedagem | **GitHub Pages** via GitHub Actions | Deploy automático por push, HTTPS e domínio grátis — e totalmente automatizável com o `gh` já autenticado nesta máquina, ao contrário da Vercel, que exige login interativo. |
 | Escopo | **One-page de conversão** | Formato de maior conversão para profissional solo; sem menu que disperse. |
 | Repositório | `adzo-pereira`, **público**, conta `victorfarias32` | GitHub não aceita espaço; slug minúsculo casa com domínio futuro. |
 | Idioma | pt-BR único | Público 100% local (Recife). |
@@ -68,7 +68,7 @@ de endodontia as levanta.
 | 4 | **Bloco de urgência — "Está com dor agora?"** | `#urgencia` | *Maior conversor em endodontia* |
 | 5 | Tratamentos (Canal em destaque) | `#tratamentos` | "Ele faz o que eu preciso?" |
 | 6 | **Quiz — "Você precisa de canal?"** | `#quiz` | Engaja quem ainda não decidiu |
-| 7 | Antes & Depois (slider comparativo) | `#resultados` | "Funciona mesmo?" |
+| 7 | Antes & Depois (galeria com scroll-snap) | `#resultados` | "Funciona mesmo?" |
 | 8 | Sobre o Dr. Adzo | `#sobre` | "É gente ou clínica de esteira?" |
 | 9 | Como é sua 1ª consulta — 3 passos | `#primeira-consulta` | "Vou ser julgado?" |
 | 10 | FAQ | `#duvidas` | Dor, preço, número de sessões |
@@ -100,8 +100,11 @@ Ao marcar, o botão de WhatsApp monta uma mensagem com os sintomas selecionados.
 Sem back-end, sem armazenamento de dados. **Não emite diagnóstico** — o resultado
 sempre orienta a procurar avaliação profissional (ver §7).
 
-**Antes & Depois.** Slider comparativo (arrastar divisória) sobre as 3 fotos clínicas.
-Legenda de caso genérica, sem identificação de paciente.
+**Antes & Depois.** As 3 fotos clínicas disponíveis **já são imagens compostas**
+(antes em cima, depois embaixo, com a marca-d'água do logo no meio), então não cabe
+slider de divisória — não há duas imagens separadas para comparar. O tratamento é uma
+galeria horizontal com scroll-snap, sem JavaScript. Legenda de caso genérica, sem
+identificação de paciente, deixando claro que o resultado varia por pessoa.
 
 **Sobre.** Foto real, texto em primeira pessoa, formação e CRO. Sem jargão.
 
@@ -243,7 +246,7 @@ reescrever a página.
 
 ### Performance
 - Lighthouse ≥ 95 em Performance, Acessibilidade, Best Practices e SEO no **mobile**.
-- Zero JS de framework. JS manual apenas em: acordeão do FAQ, slider antes/depois,
+- Zero JS de framework. JS manual apenas em: acordeão do FAQ (nativo, sem JS),
   quiz e visibilidade do botão flutuante. Total estimado < 5 KB.
 - Imagens servidas em WebP, dimensionadas, `loading="lazy"` fora da primeira dobra.
 - Fontes auto-hospedadas com `font-display: swap` e `preload` na fonte do título.
@@ -309,7 +312,7 @@ substituídos antes do site ir ao ar:
 
 1. **Repositório** `github.com/victorfarias32/adzo-pereira`, público, Astro configurado.
 2. **Protótipo navegável** com as 3 direções em `/prototipo/a`, `/prototipo/b`, `/prototipo/c`,
-   publicado na Vercel.
+   publicado no GitHub Pages em `https://victorfarias32.github.io/adzo-pereira/`.
 3. **Apresentação em Artifact** — as 3 direções lado a lado com paleta, tipografia,
    justificativa e link para cada protótipo. Link colável no WhatsApp do Adzo.
 4. **Site final** na direção escolhida, após decisão do cliente e entrega do conteúdo pendente.

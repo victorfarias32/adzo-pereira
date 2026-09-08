@@ -6,7 +6,7 @@
 
 **Architecture:** Site estático gerado por Astro, sem framework no cliente. O conteúdo vive num único módulo TypeScript (`src/data/site.ts`) e as paletas em `src/data/palettes.ts`; ambos alimentam as três direções, que compartilham componentes e diferem por uma prop `variant` e por CSS custom properties emitidas no layout base. Toda a interatividade é vanilla JS em `<script>` de componente (acordeão, slider antes/depois, quiz, botão flutuante). Os links de WhatsApp são gerados por uma função pura testada com Vitest.
 
-**Tech Stack:** Astro 5, TypeScript, Vitest, linkedom (asserções sobre o HTML gerado), `astro:assets`/sharp (otimização de imagem), `@astrojs/sitemap`, Vercel.
+**Tech Stack:** Astro 5, TypeScript, Vitest, linkedom (asserções sobre o HTML gerado), `astro:assets`/sharp (otimização de imagem), `@astrojs/sitemap`, GitHub Actions + GitHub Pages.
 
 **Spec:** `docs/superpowers/specs/2026-09-08-site-adzo-pereira-design.md`
 
@@ -71,7 +71,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://adzo-pereira.vercel.app',
+  site: 'https://victorfarias32.github.io',
   compressHTML: true,
   integrations: [sitemap()],
   build: { inlineStylesheets: 'always' },
@@ -819,6 +819,7 @@ git commit -m "feat: paletas das 3 direções com validação automática de con
 ### Task 4: Layout base, tokens em CSS e SEO
 
 **Files:**
+- Modify: `astro.config.mjs` (adiciona `base` para o GitHub Pages)
 - Create: `src/layouts/Base.astro`
 - Create: `src/styles/global.css`
 - Create: `src/components/SchemaDentist.astro`
@@ -828,6 +829,25 @@ git commit -m "feat: paletas das 3 direções com validação automática de con
 **Interfaces:**
 - Consumes: `palettes`, `Variant` (Task 3); `site` (Task 2)
 - Produces: `Base.astro` com props `{ variant: Variant; titulo: string; descricao: string }`, que emite as CSS custom properties `--c-<token>` no `:root` e o `<head>` completo
+
+- [ ] **Step 0: Ajustar `astro.config.mjs` para o subcaminho do GitHub Pages**
+
+O site é servido em `https://victorfarias32.github.io/adzo-pereira/`, ou seja, **num subcaminho**, não na raiz do domínio. Sem `base`, todo caminho absoluto (`/favicon.svg`, `/og-image.jpg`, `/prototipo/a`) aponta para a raiz do `github.io` e quebra.
+
+```js
+import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
+
+export default defineConfig({
+  site: 'https://victorfarias32.github.io',
+  base: '/adzo-pereira',
+  compressHTML: true,
+  integrations: [sitemap()],
+  build: { inlineStylesheets: 'always' },
+});
+```
+
+Astro reescreve sozinho os caminhos de assets processados (`<Image>`, CSS e JS empacotados). O que **não** é reescrito são caminhos absolutos escritos à mão em `href`/`src` — esses são os das Steps 3 e da Task 9, e precisam usar `import.meta.env.BASE_URL`.
 
 - [ ] **Step 1: Criar `src/styles/global.css`**
 
@@ -920,6 +940,13 @@ const vars = Object.entries(p.tokens)
   .join('\n    ');
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// O site é servido num subcaminho no GitHub Pages, então caminhos absolutos
+// escritos à mão precisam do BASE_URL na frente. Astro.url.pathname já o inclui.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const favicon = `${base}/favicon.svg`;
+const ogImage = new URL(`${base}/og-image.jpg`, Astro.site).href;
+
 const fontesGoogle = [p.fontes.titulo, p.fontes.corpo]
   .map((f) => `family=${f.replace(/ /g, '+')}:wght@400;500;600;700`)
   .join('&');
@@ -938,10 +965,10 @@ const fontesGoogle = [p.fontes.titulo, p.fontes.corpo]
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descricao} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL('/og-image.jpg', Astro.site).href} />
+    <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={favicon} type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?${fontesGoogle}&display=swap`} />
@@ -1880,6 +1907,9 @@ import { palettes } from '../data/palettes';
 import '../styles/global.css';
 
 const opcoes = (['a', 'b', 'c'] as const).map((v) => ({ v, ...palettes[v] }));
+
+// Subcaminho do GitHub Pages — sem isso os links vão para a raiz do github.io.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -1902,7 +1932,7 @@ const opcoes = (['a', 'b', 'c'] as const).map((v) => ({ v, ...palettes[v] }));
       </p>
       <div style="display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))">
         {opcoes.map((o) => (
-          <a href={`/prototipo/${o.v}`} style="display:block;padding:1.9rem;border:1px solid var(--c-line);border-radius:1.1rem;text-decoration:none;color:inherit">
+          <a href={`${base}/prototipo/${o.v}`} style="display:block;padding:1.9rem;border:1px solid var(--c-line);border-radius:1.1rem;text-decoration:none;color:inherit">
             <div style="display:flex;gap:.4rem;margin-bottom:1.1rem">
               {Object.values(o.tokens).slice(0, 6).map((cor) => (
                 <span style={`width:26px;height:26px;border-radius:50%;background:${cor};border:1px solid rgb(0 0 0 / .08)`}></span>
@@ -2056,28 +2086,84 @@ git push
 ### Task 10: Verificação de acessibilidade e performance, e deploy
 
 **Files:**
-- Create: `vercel.json`
+- Create: `.github/workflows/deploy.yml`
 - Modify: `src/layouts/Base.astro` (só se as fontes precisarem ser auto-hospedadas)
 
 **Interfaces:**
 - Consumes: build da Task 9
-- Produces: URL pública dos 3 protótipos na Vercel
+- Produces: URL pública dos 3 protótipos em `https://victorfarias32.github.io/adzo-pereira/`
 
-- [ ] **Step 1: Criar `vercel.json`**
+**Por que GitHub Pages e não Vercel:** o `gh` desta máquina já está autenticado com escopo `repo` + `workflow`, então o deploy é totalmente automatizável. A Vercel exigiria um login interativo que o executor não tem como completar.
 
-```json
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "astro",
-  "headers": [
-    {
-      "source": "/_astro/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
-    }
-  ]
-}
+- [ ] **Step 1: Criar `.github/workflows/deploy.yml`**
+
+```yaml
+name: Deploy no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Testes unitários
+        run: npm test
+      - name: Build e testes sobre o HTML gerado
+        run: npm run test:build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
 ```
+
+O workflow roda a suíte completa antes de publicar. Se o teste de conformidade CFO ou o de contraste falhar, **o site não vai ao ar** — é o mesmo portão da máquina local, aplicado no servidor.
+
+- [ ] **Step 2: Confirmar que `package-lock.json` está versionado**
+
+Run: `git ls-files package-lock.json`
+Expected: imprime `package-lock.json`. Sem ele o `npm ci` do workflow falha. Se não aparecer, `git add package-lock.json` e commite.
+
+- [ ] **Step 3: Habilitar o GitHub Pages em modo workflow**
+
+```bash
+gh api -X POST /repos/victorfarias32/adzo-pereira/pages \
+  -f build_type=workflow 2>/dev/null \
+|| gh api -X PUT /repos/victorfarias32/adzo-pereira/pages \
+  -f build_type=workflow
+```
+
+O `POST` cria; se o Pages já estiver habilitado ele retorna 409 e o `PUT` ajusta a origem para `workflow`. Confirme com:
+
+Run: `gh api /repos/victorfarias32/adzo-pereira/pages --jq '.build_type, .html_url'`
+Expected: `workflow` e `https://victorfarias32.github.io/adzo-pereira/`.
 
 - [ ] **Step 2: Rodar Lighthouse mobile nas três páginas**
 
@@ -2116,20 +2202,37 @@ Corrija o que falhar antes de seguir.
 
 Nas três páginas, com o devtools em 375×812: nenhum scroll horizontal, nenhum texto cortado, o botão flutuante não cobre nenhum CTA.
 
-- [ ] **Step 6: Commit e deploy**
+- [ ] **Step 6: Commit e disparar o deploy**
 
 ```bash
 git add -A
-git commit -m "chore: configuração da Vercel e ajustes de performance e acessibilidade"
+git commit -m "chore: workflow de deploy no GitHub Pages e ajustes de performance e acessibilidade"
 git push
-npx --yes vercel@latest --prod --yes
 ```
 
-Expected: a Vercel imprime a URL de produção. Anote-a — a Task 11 precisa dela.
+- [ ] **Step 7: Acompanhar o workflow até o fim**
 
-- [ ] **Step 7: Conferir a URL pública**
+```bash
+gh run watch --exit-status
+```
 
-Abra `<url>/prototipo/a`, `/b`, `/c` e `/`. Clique um CTA de WhatsApp e confirme que o app abre com a mensagem correta já escrita.
+Expected: conclui com sucesso. Se falhar, `gh run view --log-failed` mostra o passo. Causa mais provável: `npm ci` divergindo do `package-lock.json`, ou um teste que passa local e falha no Linux por causa de maiúsculas em nome de arquivo.
+
+- [ ] **Step 8: Conferir a URL pública**
+
+Abra `https://victorfarias32.github.io/adzo-pereira/` e as três páginas `/prototipo/a`, `/b`, `/c`.
+
+Verifique especificamente o que o subcaminho costuma quebrar:
+- O favicon aparece na aba (não é o ícone padrão do GitHub).
+- As imagens do hero e da galeria carregam nas três páginas.
+- Os links do índice levam aos protótipos, e não a um 404 do github.io.
+- O CSS carregou (a página não está sem estilo).
+
+Depois clique um CTA de WhatsApp e confirme que o app abre com a mensagem correta já escrita.
+
+- [ ] **Step 9: Anotar a URL final**
+
+A Task 11 precisa dela para os botões da apresentação.
 
 ---
 
@@ -2199,4 +2302,4 @@ Quando o Dr. Adzo escolher a direção:
 4. Preencher os `[[PENDENTE]]` de `src/data/site.ts` com o conteúdo real.
 5. Adicionar `streetAddress`, `postalCode` e `openingHours` ao JSON-LD.
 6. Rodar `npm test && npm run test:build` — o teste de placeholders da Task 2 precisa ser invertido nesta fase para **falhar** se `[[PENDENTE]]` ainda existir.
-7. Apontar o domínio próprio na Vercel e atualizar `site` em `astro.config.mjs`.
+7. Se houver domínio próprio: criar `public/CNAME` com o domínio, **remover `base`** de `astro.config.mjs` (passa a servir na raiz), atualizar `site`, e apontar o DNS conforme a documentação do GitHub Pages. Sem `base`, revise os usos de `import.meta.env.BASE_URL` — eles continuam corretos, mas passam a resolver para `/`.
