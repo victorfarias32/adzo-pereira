@@ -1874,24 +1874,31 @@ git commit -m "feat: FAQ, localização, rodapé e botão flutuante de WhatsApp"
 
 ---
 
-### Task 9: Fechar a composição, favicon, og-image e testes de build
+### Task 9: Colapsar para a Direção A, assets e testes de build
 
-**As páginas já existem** desde a Task 4, e as Tasks 5 a 8 plugaram suas seções nelas. Esta task confere que a composição final está correta, cria os assets que faltam e escreve os testes que travam tudo.
+**Mudança de escopo decidida pelo parceiro humano:** ele dispensou a escolha entre três
+direções e pediu o site pronto no estilo que eu julgasse melhor. Escolhida a **Direção A
+("Clínico Sereno")**. Esta task transforma o protótipo A no site definitivo, na raiz, e
+remove o que sobrou do formato de três opções.
+
+As paletas B e C **permanecem** em `src/data/palettes.ts`. São dados inertes, não custam
+nada no bundle, e mantêm o caminho de volta aberto se o cliente pedir outra cara depois.
+O teste de contraste continua cobrindo as três.
 
 **Files:**
-- Verify: `src/components/Pagina.astro` (criado na Task 4, preenchido pelas Tasks 5-8 — confira contra o Step 1)
-- Verify: `src/pages/prototipo/a.astro`, `b.astro`, `c.astro` (criados na Task 4)
-- Verify: `src/pages/index.astro` (criado na Task 4 — o código completo está no Step 3)
+- Modify: `src/pages/index.astro` — passa a ser a página real, Direção A
+- Delete: `src/pages/prototipo/a.astro`, `b.astro`, `c.astro`
 - Create: `public/favicon.svg`, `public/og-image.jpg`
-- Test: `tests/build/seo.test.ts` (já escrito na Task 4) + `tests/build/conversao.test.ts`
+- Modify: `tests/build/seo.test.ts` — passa a testar `dist/index.html`
+- Test: `tests/build/conversao.test.ts`
 
 **Interfaces:**
-- Consumes: todos os componentes das Tasks 5–8, `Base.astro`, `palettes`
-- Produces: `/prototipo/a`, `/prototipo/b`, `/prototipo/c` e `/`
+- Consumes: `Pagina.astro` completo ao fim da Task 8; `Base.astro`; `palettes`
+- Produces: o site em `/`
 
 - [ ] **Step 1: Conferir `src/components/Pagina.astro` contra o alvo**
 
-Composição única das 12 seções, para garantir que as 3 direções nunca divirjam em conteúdo ou ordem. O arquivo deve estar assim ao fim da Task 8; corrija qualquer divergência.
+Ao fim da Task 8 ele deve estar exatamente assim. Corrija qualquer divergência:
 
 ```astro
 ---
@@ -1930,14 +1937,17 @@ const { variant } = Astro.props;
 <WhatsFlutuante />
 ```
 
-- [ ] **Step 2: Conferir as três páginas de protótipo**
+A prop `variant` continua existindo e continua sendo `'a'` na prática. Não a remova:
+ela é o que mantém o custo de trocar de direção em uma linha.
 
-`src/pages/prototipo/a.astro`:
+- [ ] **Step 2: Fazer de `src/pages/index.astro` o site definitivo**
+
+Substitua o índice de três opções por:
 
 ```astro
 ---
-import Base from '../../layouts/Base.astro';
-import Pagina from '../../components/Pagina.astro';
+import Base from '../layouts/Base.astro';
+import Pagina from '../components/Pagina.astro';
 ---
 <Base
   variant="a"
@@ -1948,90 +1958,20 @@ import Pagina from '../../components/Pagina.astro';
 </Base>
 ```
 
-`src/pages/prototipo/b.astro`:
+- [ ] **Step 3: Remover as rotas de protótipo**
 
-```astro
----
-import Base from '../../layouts/Base.astro';
-import Pagina from '../../components/Pagina.astro';
----
-<Base
-  variant="b"
-  titulo="Dr. Adzo Pereira — Endodontista em Recife | Tratamento de Canal"
-  descricao="Especialista em endodontia em Recife. Tratamento de canal, retratamento e atendimento de urgência para dor de dente. CRO-PE 15853. Agende pelo WhatsApp."
->
-  <Pagina variant="b" />
-</Base>
+```bash
+git rm -r src/pages/prototipo
 ```
 
-`src/pages/prototipo/c.astro`:
+- [ ] **Step 4: Verificar que sobrou uma rota só**
 
-```astro
----
-import Base from '../../layouts/Base.astro';
-import Pagina from '../../components/Pagina.astro';
----
-<Base
-  variant="c"
-  titulo="Dr. Adzo Pereira — Endodontista em Recife | Tratamento de Canal"
-  descricao="Especialista em endodontia em Recife. Tratamento de canal, retratamento e atendimento de urgência para dor de dente. CRO-PE 15853. Agende pelo WhatsApp."
->
-  <Pagina variant="c" />
-</Base>
-```
+Run: `npm run build`
+Expected: 1 página construída, `dist/index.html`. Nenhum `dist/prototipo/`.
 
-As três páginas compartilham `titulo` e `descricao` de propósito: são protótipos da mesma página, e o índice está com `noindex`, então não há risco de conteúdo duplicado no Google. Quando a direção for escolhida, sobra uma só.
+- [ ] **Step 5: Criar `public/favicon.svg`**
 
-- [ ] **Step 3: Conferir `src/pages/index.astro` — o índice de apresentação**
-
-```astro
----
-import { palettes } from '../data/palettes';
-import '../styles/global.css';
-
-const opcoes = (['a', 'b', 'c'] as const).map((v) => ({ v, ...palettes[v] }));
----
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dr. Adzo Pereira — 3 propostas de site</title>
-    <meta name="description" content="Três direções visuais propostas para o site do Dr. Adzo Pereira, especialista em endodontia em Recife." />
-    <meta name="robots" content="noindex" />
-    <style is:inline>
-      :root { --c-surface: #FBF9F6; --c-ink: #12303F; --c-muted: #5C6B73; --c-primary: #1B5A7A; --c-line: #DED5C8; --f-titulo: Georgia; --f-corpo: system-ui; }
-    </style>
-  </head>
-  <body>
-    <main class="container" style="padding-block: 4rem;">
-      <p style="letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;color:var(--c-muted)">Proposta de site</p>
-      <h1 style="font-size:clamp(2rem,5vw,3rem);margin:.5rem 0 1rem">Dr. Adzo Pereira</h1>
-      <p style="color:var(--c-muted);margin-bottom:3rem">
-        Três direções visuais com o mesmo conteúdo e a mesma estrutura. Abra cada uma no celular e escolha a que mais representa o seu consultório.
-      </p>
-      <div style="display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))">
-        {opcoes.map((o) => (
-          <a href={`/prototipo/${o.v}`} style="display:block;padding:1.9rem;border:1px solid var(--c-line);border-radius:1.1rem;text-decoration:none;color:inherit">
-            <div style="display:flex;gap:.4rem;margin-bottom:1.1rem">
-              {Object.values(o.tokens).slice(0, 6).map((cor) => (
-                <span style={`width:26px;height:26px;border-radius:50%;background:${cor};border:1px solid rgb(0 0 0 / .08)`}></span>
-              ))}
-            </div>
-            <strong style="display:block;font-size:1.25rem;margin-bottom:.5rem">Opção {o.v.toUpperCase()} — {o.nome}</strong>
-            <p style="color:var(--c-muted);font-size:.93rem">{o.descricao}</p>
-            <span style="display:inline-block;margin-top:1rem;color:var(--c-primary);font-weight:600">Ver esta versão →</span>
-          </a>
-        ))}
-      </div>
-    </main>
-  </body>
-</html>
-```
-
-- [ ] **Step 4: Criar `public/favicon.svg`**
-
-Dente estilizado em linha, na cor da marca — coerente com o logo existente.
+Dente estilizado em linha, na cor da marca.
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -2040,100 +1980,143 @@ Dente estilizado em linha, na cor da marca — coerente com o logo existente.
 </svg>
 ```
 
-- [ ] **Step 5: Gerar `public/og-image.jpg`**
+- [ ] **Step 6: Gerar `public/og-image.jpg`**
 
-1200×630, fundo `#12303F`, com o nome "Dr. Adzo Pereira", "Especialista em Endodontia · Recife" e "CRO-PE 15853". Gere com sharp:
+1200x630. E a imagem que aparece quando o link e colado no WhatsApp e no Instagram --
+o primeiro contato visual do paciente com o site.
 
-```bash
-node --input-type=module -e "
+Escreva um script temporario `scripts/og.mjs` (nao commite) e rode com `node scripts/og.mjs`:
+
+```js
 import sharp from 'sharp';
-const svg = \`<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'>
-  <rect width='1200' height='630' fill='#12303F'/>
-  <text x='80' y='300' font-family='Georgia, serif' font-size='72' fill='#FBF9F6'>Dr. Adzo Pereira</text>
-  <text x='80' y='365' font-family='Helvetica, sans-serif' font-size='30' fill='#9FB3BD'>Especialista em Endodontia · Recife — PE</text>
-  <text x='80' y='420' font-family='Helvetica, sans-serif' font-size='24' fill='#C9A227' letter-spacing='3'>CRO-PE 15853</text>
-</svg>\`;
+
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
+  <rect width="1200" height="630" fill="#12303F"/>
+  <text x="80" y="300" font-family="Georgia, serif" font-size="72" fill="#FBF9F6">Dr. Adzo Pereira</text>
+  <text x="80" y="365" font-family="Helvetica, sans-serif" font-size="30" fill="#9FB3BD">Especialista em Endodontia &#183; Recife &#8212; PE</text>
+  <text x="80" y="420" font-family="Helvetica, sans-serif" font-size="24" fill="#C9A227" letter-spacing="3">CRO-PE 15853</text>
+</svg>`;
+
 await sharp(Buffer.from(svg)).jpeg({ quality: 88 }).toFile('public/og-image.jpg');
 console.log('og-image.jpg gerado');
-"
 ```
 
-- [ ] **Step 6: Escrever o teste de conversão sobre o HTML gerado**
+Confirme que o arquivo existe e tem 1200x630. Apague `scripts/og.mjs` depois.
 
-Create `tests/build/conversao.test.ts`:
+- [ ] **Step 7: Apontar `tests/build/seo.test.ts` para a pagina unica**
+
+O teste foi escrito na Task 4 mirando `dist/prototipo/<v>/index.html`. Reescreva para uma pagina so:
 
 ```ts
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { parseHTML } from 'linkedom';
+
+describe('SEO e head', () => {
+  let doc: Document;
+  beforeAll(() => {
+    const html = readFileSync('dist/index.html', 'utf-8');
+    doc = parseHTML(html).document as unknown as Document;
+  });
+
+  it('declara pt-BR', () => {
+    expect(doc.documentElement.getAttribute('lang')).toBe('pt-BR');
+  });
+
+  it('tem title e meta description nao vazios', () => {
+    expect(doc.title.length).toBeGreaterThan(10);
+    const desc = doc.querySelector('meta[name="description"]');
+    expect(desc?.getAttribute('content')?.length ?? 0).toBeGreaterThan(50);
+  });
+
+  it('tem canonical e Open Graph', () => {
+    expect(doc.querySelector('link[rel="canonical"]')).not.toBeNull();
+    expect(doc.querySelector('meta[property="og:title"]')).not.toBeNull();
+    expect(doc.querySelector('meta[property="og:image"]')).not.toBeNull();
+  });
+
+  it('publica JSON-LD do tipo Dentist com o Instagram', () => {
+    const bloco = doc.querySelector('script[type="application/ld+json"]');
+    expect(bloco).not.toBeNull();
+    const dados = JSON.parse(bloco!.textContent!);
+    expect(dados['@type']).toBe('Dentist');
+    expect(dados.sameAs).toContain('https://www.instagram.com/adzopereira/');
+  });
+
+  it('exibe o CRO exigido pelo CFO', () => {
+    expect(doc.body.textContent).toContain('CRO-PE 15853');
+  });
+});
+```
+
+- [ ] **Step 8: Escrever `tests/build/conversao.test.ts`**
+
+Trava a estrategia de conversao no HTML gerado.
+
+```ts
+import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { parseHTML } from 'linkedom';
 
-const VARIANTES = ['a', 'b', 'c'] as const;
+let doc: Document;
+beforeAll(() => {
+  doc = parseHTML(readFileSync('dist/index.html', 'utf-8')).document as unknown as Document;
+});
 
-function doc(v: string) {
-  return parseHTML(readFileSync(`dist/prototipo/${v}/index.html`, 'utf-8')).document;
-}
+describe('estrategia de conversao', () => {
+  it('tem pelo menos 8 links de WhatsApp', () => {
+    expect(doc.querySelectorAll('a[href*="wa.me/5581998742330"]').length)
+      .toBeGreaterThanOrEqual(8);
+  });
 
-describe('estratégia de conversão', () => {
-  for (const v of VARIANTES) {
-    describe(`protótipo ${v}`, () => {
-      it('tem pelo menos 8 links de WhatsApp', () => {
-        const links = doc(v).querySelectorAll('a[href*="wa.me/5581998742330"]');
-        expect(links.length).toBeGreaterThanOrEqual(8);
-      });
+  it('todo link de WhatsApp abre em nova aba com rel noopener', () => {
+    for (const a of doc.querySelectorAll('a[href*="wa.me"]')) {
+      expect(a.getAttribute('target')).toBe('_blank');
+      expect(a.getAttribute('rel')).toContain('noopener');
+    }
+  });
 
-      it('todo link de WhatsApp abre em nova aba com rel noopener', () => {
-        const links = doc(v).querySelectorAll('a[href*="wa.me"]');
-        for (const a of links) {
-          expect(a.getAttribute('target')).toBe('_blank');
-          expect(a.getAttribute('rel')).toContain('noopener');
-        }
-      });
+  it('usa mensagens pre-preenchidas distintas por origem', () => {
+    const hrefs = Array.from(doc.querySelectorAll('a[href*="wa.me"]'))
+      .map((a) => a.getAttribute('href')!);
+    const textos = new Set(hrefs.map((h) => h.split('?text=')[1]));
+    expect(textos.size).toBeGreaterThanOrEqual(6);
+  });
 
-      it('usa mensagens pré-preenchidas distintas por origem', () => {
-        const hrefs = Array.from(doc(v).querySelectorAll('a[href*="wa.me"]'))
-          .map((a) => a.getAttribute('href')!);
-        const textos = new Set(hrefs.map((h) => h.split('?text=')[1]));
-        // header, hero, urgência, 5 tratamentos, quiz, faq, rodapé → bem mais que 4 distintas
-        expect(textos.size).toBeGreaterThanOrEqual(6);
-      });
+  it('o CTA de urgencia menciona urgencia', () => {
+    const hrefs = Array.from(doc.querySelectorAll('a[href*="wa.me"]'))
+      .map((a) => decodeURIComponent(a.getAttribute('href')!));
+    expect(hrefs.some((h) => h.includes('urg\u00eancia'))).toBe(true);
+  });
 
-      it('o CTA de urgência menciona urgência', () => {
-        const hrefs = Array.from(doc(v).querySelectorAll('a[href*="wa.me"]'))
-          .map((a) => decodeURIComponent(a.getAttribute('href')!));
-        expect(hrefs.some((h) => h.includes('urgência'))).toBe(true);
-      });
+  it('tem as 12 secoes da spec, na ordem', () => {
+    const esperadas = [
+      'topo', 'inicio', 'credenciais', 'urgencia', 'tratamentos', 'quiz',
+      'resultados', 'sobre', 'primeira-consulta', 'duvidas', 'localizacao', 'rodape',
+    ];
+    const encontradas = Array.from(doc.querySelectorAll('[id]'))
+      .map((el) => el.id)
+      .filter((id) => esperadas.includes(id));
+    expect(encontradas).toEqual(esperadas);
+  });
 
-      it('tem as 12 seções da spec, na ordem', () => {
-        const esperadas = [
-          'topo', 'inicio', 'credenciais', 'urgencia', 'tratamentos', 'quiz',
-          'resultados', 'sobre', 'primeira-consulta', 'duvidas', 'localizacao', 'rodape',
-        ];
-        const d = doc(v);
-        const encontradas = Array.from(d.querySelectorAll('[id]'))
-          .map((el) => el.id)
-          .filter((id) => esperadas.includes(id));
-        expect(encontradas).toEqual(esperadas);
-      });
+  it('toda imagem tem alt descritivo', () => {
+    for (const img of doc.querySelectorAll('img')) {
+      expect((img.getAttribute('alt') ?? '').length).toBeGreaterThan(10);
+    }
+  });
 
-      it('toda imagem tem alt descritivo', () => {
-        for (const img of doc(v).querySelectorAll('img')) {
-          expect((img.getAttribute('alt') ?? '').length).toBeGreaterThan(10);
-        }
-      });
+  it('tem exatamente um h1', () => {
+    expect(doc.querySelectorAll('h1').length).toBe(1);
+  });
 
-      it('tem exatamente um h1', () => {
-        expect(doc(v).querySelectorAll('h1').length).toBe(1);
-      });
-    });
-  }
-
-  it('o número de WhatsApp aparece só em whatsapp.ts no código-fonte', () => {
+  it('o numero de WhatsApp aparece so em whatsapp.ts no codigo-fonte', () => {
     const encontrados: string[] = [];
     const varrer = (dir: string) => {
       for (const entrada of readdirSync(dir, { withFileTypes: true })) {
         const caminho = `${dir}/${entrada.name}`;
         if (entrada.isDirectory()) { varrer(caminho); continue; }
-        if (!/\.(ts|astro|js|mjs)$/.test(entrada.name)) continue;
+        if (!/[.](ts|astro|js|mjs)$/.test(entrada.name)) continue;
         if (readFileSync(caminho, 'utf-8').includes('5581998742330')) {
           encontrados.push(caminho);
         }
@@ -2145,19 +2128,19 @@ describe('estratégia de conversão', () => {
 });
 ```
 
-- [ ] **Step 7: Rodar os testes de build**
+- [ ] **Step 9: Rodar tudo**
 
-Run: `npm run test:build`
-Expected: PASS em `seo.test.ts` e `conversao.test.ts`.
+Run: `npm test && npm run test:build`
+Expected: suite unitaria verde e os dois arquivos de build verdes.
 
-Se o teste das 12 seções falhar, a mensagem mostra a lista obtida contra a esperada — normalmente é um `id` faltando ou fora de ordem em `Pagina.astro`. Se o teste do número único falhar, alguém repetiu o literal fora de `whatsapp.ts`; importe a função em vez de repetir.
+Se as 12 secoes falharem, a mensagem mostra a lista obtida contra a esperada -- normalmente
+e um `id` faltando ou fora de ordem em `Pagina.astro`.
 
-- [ ] **Step 8: Rodar a suíte completa e commitar**
+- [ ] **Step 10: Commit e push**
 
 ```bash
-npm test && npm run test:build
 git add -A
-git commit -m "feat: três páginas de protótipo, índice de apresentação e testes de build"
+git commit -m "feat: site na Direcao A, favicon, og-image e testes sobre o HTML gerado"
 git push
 ```
 
@@ -2233,41 +2216,27 @@ Anote a URL — a Task 11 precisa dela para os botões da apresentação.
 
 ---
 
-### Task 11: Apresentação para o cliente
+### Task 11: Entrega
 
-**Files:**
-- Create: `apresentacao/index.html` (fonte da apresentação, publicada como Artifact)
+O parceiro humano dispensou a apresentacao de tres opcoes -- a entrega e o site pronto.
 
-**Interfaces:**
-- Consumes: `palettes` (Task 3) para as cores exibidas; a URL de produção (Task 10)
-- Produces: link de Artifact para o Dr. Adzo
+- [ ] **Step 1: Confirmar o site em producao**
 
-- [ ] **Step 1: Carregar a skill de design de artifact**
+Abra `https://adzo-pereira.vercel.app/` e percorra a pagina no celular e no desktop.
 
-Antes de escrever o HTML, invoque a skill `artifact-design`. Ela calibra o nível de investimento visual apropriado.
+Checklist antes de chamar de pronto:
+- As 12 secoes aparecem, na ordem.
+- As 5 fotos carregam.
+- O botao flutuante de WhatsApp surge depois do hero e nao cobre nenhum CTA.
+- O quiz monta a mensagem com os sintomas marcados.
+- O acordeao do FAQ abre e fecha.
+- Colar o link num chat mostra o preview com a og-image.
 
-- [ ] **Step 2: Escrever `apresentacao/index.html`**
+- [ ] **Step 2: Entregar ao parceiro humano**
 
-Conteúdo obrigatório:
-- Abertura: nome do Dr. Adzo, o problema (Instagram sem destino) e o objetivo (converter em WhatsApp).
-- Uma seção por direção (A, B, C), cada uma com: nome, amostras de cor renderizadas a partir dos hex reais de `palettes.ts`, par tipográfico, as referências internacionais que inspiraram, a sensação-alvo, o risco declarado e um botão para o protótipo ao vivo.
-- Um bloco explicando a arquitetura de conteúdo das 12 seções e por que a ordem é essa (objeções).
-- Um bloco explicando a mensagem pré-preenchida por CTA — é o diferencial e precisa ser vendido.
-- Fechamento: o que falta o Adzo enviar (a lista de `site.pendentes`).
-
-Requisitos: pt-BR, mobile-first (ele vai abrir no celular pelo WhatsApp), tema claro e escuro conforme a spec de Artifacts, sem prometer resultado e sem citar preço.
-
-- [ ] **Step 3: Publicar como Artifact**
-
-Use a ferramenta Artifact com `file_path` apontando para `apresentacao/index.html`, um `<title>` curto no topo do arquivo, `description` de uma linha e `favicon` de dois emojis.
-
-- [ ] **Step 4: Commit**
-
-```bash
-git add apresentacao
-git commit -m "docs: apresentação das 3 direções para o cliente"
-git push
-```
+Mande a URL de producao e a lista de `site.pendentes` / `site.pendentesExternos` --
+endereco, horarios, formacao e convenios estao marcados como `[[PENDENTE]]` e
+**nao podem ir ao ar assim** para o publico final.
 
 ---
 
@@ -2291,7 +2260,7 @@ Tasks 5, 6, 7 e 8 **não** podem ser paralelizadas: desde o ressequenciamento, c
 edita `src/components/Pagina.astro` para plugar a própria seção. Execute-as em ordem.
 Os componentes em si são independentes — é só o arquivo de composição que serializa.
 
-## Depois da escolha do cliente
+## Se o cliente quiser outra direcao depois
 
 Quando o Dr. Adzo escolher a direção:
 
