@@ -2287,7 +2287,9 @@ Task 1 (scaffold + repo)
                                                          └─ Task 11 (apresentação)
 ```
 
-Tasks 5, 6, 7 e 8 são independentes entre si e podem ser paralelizadas depois da Task 4.
+Tasks 5, 6, 7 e 8 **não** podem ser paralelizadas: desde o ressequenciamento, cada uma
+edita `src/components/Pagina.astro` para plugar a própria seção. Execute-as em ordem.
+Os componentes em si são independentes — é só o arquivo de composição que serializa.
 
 ## Depois da escolha do cliente
 
