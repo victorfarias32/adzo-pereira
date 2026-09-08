@@ -272,11 +272,11 @@ desenhado primeiro em 375 px e depois expandido.
 O Código de Ética Odontológica restringe publicidade. O site precisa respeitar:
 
 - **CRO-PE 15853 visível** e nome do responsável técnico.
-- **Antes/depois:** o CFO restringe divulgação de imagens de resultado com finalidade
-  de captação. As fotos serão publicadas **sem identificação do paciente** e
-  apresentadas como registro clínico, não como promessa de resultado.
-  **Ação necessária:** confirmar com o Dr. Adzo que ele possui autorização de uso
-  de imagem dos pacientes antes de publicar. Se não houver, a seção sai do ar.
+- **Antes/depois:** autorização de uso de imagem dos pacientes **confirmada pelo
+  cliente em 2026-09-08**. As fotos serão publicadas mesmo assim **sem identificação
+  do paciente** (apenas o enquadramento intraoral já existente, sem rosto, nome ou
+  qualquer dado) e apresentadas como registro clínico, não como promessa de resultado.
+  A seção está liberada.
 - **Sem promessa de resultado**, sem "melhor de Recife", sem superlativo comparativo.
 - **Sem tabela de preços** e sem promoção/desconto.
 - **O quiz não diagnostica.** Texto obrigatório junto ao resultado: o teste é
@@ -293,7 +293,7 @@ substituídos antes do site ir ao ar:
 - [ ] Horários de atendimento
 - [ ] Ano de formatura / instituição / tempo de atuação
 - [ ] Depoimentos de pacientes (com autorização)
-- [ ] Autorização de uso de imagem para as fotos de antes/depois
+- [x] ~~Autorização de uso de imagem para as fotos de antes/depois~~ — confirmada 2026-09-08
 - [ ] Domínio próprio desejado
 - [ ] Confirmação da lista de tratamentos oferecidos
 - [ ] Logo em vetor (SVG/AI) — hoje só existe em marca-d'água de JPG
