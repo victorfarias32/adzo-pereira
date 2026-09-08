@@ -47,7 +47,7 @@ azul-petróleo, nome em script serifado, subtítulo em sans caixa-alta espaçada
 | Decisão | Escolha | Motivo |
 |---|---|---|
 | Stack | **Astro** | Gera HTML estático puro; sem JS de framework no cliente. Componentização e SEO built-in. |
-| Hospedagem | **GitHub Pages** via GitHub Actions | Deploy automático por push, HTTPS e domínio grátis — e totalmente automatizável com o `gh` já autenticado nesta máquina, ao contrário da Vercel, que exige login interativo. |
+| Hospedagem | **Vercel** | O parceiro humano conectou o repositório à Vercel, então cada push publica sozinho. Serve na raiz do domínio (sem subcaminho), HTTPS e domínio próprio fáceis de apontar. Tentou-se GitHub Pages porque o deploy seria automatizável pelo agente, mas o subcaminho `/adzo-pereira` complicaria os caminhos sem ganho. |
 | Escopo | **One-page de conversão** | Formato de maior conversão para profissional solo; sem menu que disperse. |
 | Repositório | `adzo-pereira`, **público**, conta `victorfarias32` | GitHub não aceita espaço; slug minúsculo casa com domínio futuro. |
 | Idioma | pt-BR único | Público 100% local (Recife). |
@@ -132,12 +132,14 @@ de qual seção veio o lead sem nenhuma ferramenta de analytics.
 
 | Origem do clique | Mensagem pré-preenchida |
 |---|---|
-| Header / botão flutuante | `Olá, Dr. Adzo! Vim pelo site e gostaria de agendar uma avaliação.` |
+| Header | `Olá, Dr. Adzo! Vim pelo site e gostaria de agendar uma avaliação.` |
+| Botão flutuante | `Olá, Dr. Adzo! Estava navegando no site e quero agendar uma avaliação.` |
 | Hero | `Olá, Dr. Adzo! Vim pelo site e quero marcar uma consulta.` |
 | Bloco de urgência | `Olá, Dr. Adzo! Estou com dor de dente e preciso de atendimento com urgência.` |
 | Card de tratamento | `Olá, Dr. Adzo! Vim pelo site e quero saber sobre <tratamento>.` |
 | Quiz | `Olá, Dr. Adzo! Fiz o teste no site e marquei: <sintomas>. Posso marcar uma avaliação?` |
-| FAQ / rodapé | `Olá, Dr. Adzo! Vim pelo site e tenho uma dúvida.` |
+| FAQ | `Olá, Dr. Adzo! Li as perguntas frequentes do site e ficou uma dúvida.` |
+| Rodapé | `Olá, Dr. Adzo! Vim pelo site e tenho uma dúvida.` |
 
 **Regras de UX do CTA:**
 - Todo link de WhatsApp abre em nova aba (`target="_blank" rel="noopener"`).
@@ -146,6 +148,9 @@ de qual seção veio o lead sem nenhuma ferramenta de analytics.
 - O botão flutuante nunca cobre conteúdo clicável no mobile (respeita `safe-area-inset`).
 - A geração dos links fica **centralizada numa única função utilitária** — o número
   aparece uma vez só no código.
+- **As seis origens têm mensagens duas a duas distintas**, verificado por teste. Duas
+  origens com o mesmo texto anulam o propósito do módulo: o Adzo deixaria de saber
+  qual superfície do site converteu.
 
 ---
 
@@ -312,7 +317,7 @@ substituídos antes do site ir ao ar:
 
 1. **Repositório** `github.com/victorfarias32/adzo-pereira`, público, Astro configurado.
 2. **Protótipo navegável** com as 3 direções em `/prototipo/a`, `/prototipo/b`, `/prototipo/c`,
-   publicado no GitHub Pages em `https://victorfarias32.github.io/adzo-pereira/`.
+   publicado na Vercel, com deploy automático a cada push.
 3. **Apresentação em Artifact** — as 3 direções lado a lado com paleta, tipografia,
    justificativa e link para cada protótipo. Link colável no WhatsApp do Adzo.
 4. **Site final** na direção escolhida, após decisão do cliente e entrega do conteúdo pendente.
