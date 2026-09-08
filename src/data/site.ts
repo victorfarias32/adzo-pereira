@@ -176,14 +176,15 @@ export const site = {
     alt: 'Recepção do consultório do Dr. Adzo Pereira',
   },
 
-  /** Chaves que ainda dependem de informação do cliente (spec §8). */
+  /** Caminhos dentro deste objeto que ainda dependem de informação do cliente (spec §8). */
   pendentes: [
     'sobre.formacao',
-    'faq[3].resposta',
+    'faq.3.resposta',
     'localizacao.endereco',
     'localizacao.horarios',
     'localizacao.mapaEmbed',
-    'depoimentos',
-    'logo em vetor',
   ],
+
+  /** Conteúdo ainda pendente do cliente que não existe como caminho neste objeto. */
+  pendentesExternos: ['depoimentos', 'logo em vetor'],
 };

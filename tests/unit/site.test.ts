@@ -7,12 +7,17 @@ const PROIBIDAS = [
   'nº 1',
   'promoção',
   'desconto',
-  'R$',
   'garantimos',
 ];
 
+const VALOR_MONETARIO = /R\$|\b\d{2,4}\s*(reais|conto)\b/i;
+
 function todoOTexto(): string {
   return JSON.stringify(site).toLowerCase();
+}
+
+function resolver(caminho: string): unknown {
+  return caminho.split('.').reduce<any>((atual, chave) => atual?.[chave], site);
 }
 
 describe('conteúdo do site', () => {
@@ -25,6 +30,10 @@ describe('conteúdo do site', () => {
     for (const termo of PROIBIDAS) {
       expect(texto).not.toContain(termo.toLowerCase());
     }
+  });
+
+  it('não divulga valores em dinheiro', () => {
+    expect(JSON.stringify(site)).not.toMatch(VALOR_MONETARIO);
   });
 
   it('tem exatamente 5 sintomas no quiz', () => {
@@ -50,12 +59,18 @@ describe('conteúdo do site', () => {
     }
   });
 
-  it('marca explicitamente o conteúdo ainda pendente do cliente', () => {
-    // Placeholders precisam ser detectáveis para não irem ao ar por engano
+  it('todo caminho pendente resolve para um valor marcado', () => {
     expect(site.pendentes.length).toBeGreaterThan(0);
-    for (const chave of site.pendentes) {
-      expect(JSON.stringify(site)).toContain('[[PENDENTE]]');
-      expect(typeof chave).toBe('string');
+    for (const caminho of site.pendentes) {
+      const valor = resolver(caminho);
+      expect(typeof valor, `${caminho} não resolveu`).toBe('string');
+      expect(String(valor), `${caminho} não está marcado`).toContain('[[PENDENTE]]');
+    }
+  });
+
+  it('nenhum item externo é caminho do objeto', () => {
+    for (const item of site.pendentesExternos) {
+      expect(resolver(item)).toBeUndefined();
     }
   });
 });
