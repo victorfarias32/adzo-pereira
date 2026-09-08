@@ -1069,11 +1069,11 @@ import Base from '../../layouts/Base.astro';
 import Pagina from '../../components/Pagina.astro';
 ---
 <Base
-  variant="a"
+  variant="c"
   titulo="Dr. Adzo Pereira — Endodontista em Recife | Tratamento de Canal"
   descricao="Especialista em endodontia em Recife. Tratamento de canal, retratamento e atendimento de urgência para dor de dente. CRO-PE 15853. Agende pelo WhatsApp."
 >
-  <Pagina variant="a" />
+  <Pagina variant="c" />
 </Base>
 ```
 
@@ -1874,19 +1874,19 @@ git commit -m "feat: FAQ, localização, rodapé e botão flutuante de WhatsApp"
 
 ---
 
-### Task 9: Colapsar para a Direção A, assets e testes de build
+### Task 9: Colapsar para a Direção C, assets e testes de build
 
 **Mudança de escopo decidida pelo parceiro humano:** ele dispensou a escolha entre três
-direções e pediu o site pronto no estilo que eu julgasse melhor. Escolhida a **Direção A
-("Clínico Sereno")**. Esta task transforma o protótipo A no site definitivo, na raiz, e
+direções e pediu o site pronto no estilo que eu julgasse melhor. Escolhida pelo parceiro humano, depois de ver os três protótipos no ar, a **Direção C
+("Acolhimento Humano")**. Esta task transforma o protótipo A no site definitivo, na raiz, e
 remove o que sobrou do formato de três opções.
 
-As paletas B e C **permanecem** em `src/data/palettes.ts`. São dados inertes, não custam
+As paletas A e B **permanecem** em `src/data/palettes.ts`. São dados inertes, não custam
 nada no bundle, e mantêm o caminho de volta aberto se o cliente pedir outra cara depois.
 O teste de contraste continua cobrindo as três.
 
 **Files:**
-- Modify: `src/pages/index.astro` — passa a ser a página real, Direção A
+- Modify: `src/pages/index.astro` — passa a ser a página real, Direção C
 - Delete: `src/pages/prototipo/a.astro`, `b.astro`, `c.astro`
 - Create: `public/favicon.svg`, `public/og-image.jpg`
 - Modify: `tests/build/seo.test.ts` — passa a testar `dist/index.html`
@@ -1937,7 +1937,7 @@ const { variant } = Astro.props;
 <WhatsFlutuante />
 ```
 
-A prop `variant` continua existindo e continua sendo `'a'` na prática. Não a remova:
+A prop `variant` continua existindo e continua sendo `'c'` na prática. Não a remova:
 ela é o que mantém o custo de trocar de direção em uma linha.
 
 - [ ] **Step 2: Fazer de `src/pages/index.astro` o site definitivo**
@@ -1950,11 +1950,11 @@ import Base from '../layouts/Base.astro';
 import Pagina from '../components/Pagina.astro';
 ---
 <Base
-  variant="a"
+  variant="c"
   titulo="Dr. Adzo Pereira — Endodontista em Recife | Tratamento de Canal"
   descricao="Especialista em endodontia em Recife. Tratamento de canal, retratamento e atendimento de urgência para dor de dente. CRO-PE 15853. Agende pelo WhatsApp."
 >
-  <Pagina variant="a" />
+  <Pagina variant="c" />
 </Base>
 ```
 
@@ -1991,10 +1991,10 @@ Escreva um script temporario `scripts/og.mjs` (nao commite) e rode com `node scr
 import sharp from 'sharp';
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
-  <rect width="1200" height="630" fill="#12303F"/>
-  <text x="80" y="300" font-family="Georgia, serif" font-size="72" fill="#FBF9F6">Dr. Adzo Pereira</text>
-  <text x="80" y="365" font-family="Helvetica, sans-serif" font-size="30" fill="#9FB3BD">Especialista em Endodontia &#183; Recife &#8212; PE</text>
-  <text x="80" y="420" font-family="Helvetica, sans-serif" font-size="24" fill="#C9A227" letter-spacing="3">CRO-PE 15853</text>
+  <rect width="1200" height="630" fill="#2B3A42"/>
+  <text x="80" y="300" font-family="Georgia, serif" font-size="72" fill="#FAF7F2">Dr. Adzo Pereira</text>
+  <text x="80" y="365" font-family="Helvetica, sans-serif" font-size="30" fill="#C3CDD3">Especialista em Endodontia &#183; Recife &#8212; PE</text>
+  <text x="80" y="420" font-family="Helvetica, sans-serif" font-size="24" fill="#C89B6A" letter-spacing="3">CRO-PE 15853</text>
 </svg>`;
 
 await sharp(Buffer.from(svg)).jpeg({ quality: 88 }).toFile('public/og-image.jpg');
@@ -2140,7 +2140,7 @@ e um `id` faltando ou fora de ordem em `Pagina.astro`.
 
 ```bash
 git add -A
-git commit -m "feat: site na Direcao A, favicon, og-image e testes sobre o HTML gerado"
+git commit -m "feat: site na Direcao C, favicon, og-image e testes sobre o HTML gerado"
 git push
 ```
 
@@ -2174,7 +2174,7 @@ Os arquivos `lh-*.json` são temporários — não os commite. Acrescente `lh-*.
 
 Ordem de ataque, da causa mais provável para a menos:
 1. **Fontes do Google CDN** derrubando o LCP → baixe os `.woff2` para `public/fonts/`, declare `@font-face` com `font-display: swap` em `global.css`, remova os `<link>` do Google em `Base.astro` e adicione `<link rel="preload" as="font" type="font/woff2" crossorigin>` para a fonte de título.
-2. **Contraste** apontado pelo Lighthouse → o teste da Task 3 só cobre os pares declarados; adicione o par faltante a `paresDeTexto` da direção A e ajuste o hex até o teste passar.
+2. **Contraste** apontado pelo Lighthouse → o teste da Task 3 só cobre os pares declarados; adicione o par faltante a `paresDeTexto` da direção C e ajuste o hex até o teste passar.
 3. **Imagem do hero** sem dimensão reservada → confirme que `<Image>` do `astro:assets` está emitindo `width`/`height`.
 
 Rode o Lighthouse de novo após cada correção.
@@ -2256,10 +2256,28 @@ Os componentes em si são independentes — é só o arquivo de composição que
 
 ## Se o cliente quiser outra direcao depois
 
-As paletas B e C continuam em `src/data/palettes.ts`, cobertas pelo teste de contraste.
-Trocar a cara do site e mudar `variant="a"` para `"b"` ou `"c"` nos dois pontos de
+As paletas A e B continuam em `src/data/palettes.ts`, cobertas pelo teste de contraste.
+Trocar a cara do site e mudar `variant="c"` para `"a"` ou `"b"` nos dois pontos de
 `src/pages/index.astro`. Os componentes com estilo por direcao (`Hero`, `Tratamentos`,
 `Resultados`) ja ramificam sozinhos.
+
+## Acervo de imagens — limitacao conhecida
+
+So existem 5 fotos, e o site consome todas: o retrato aparece duas vezes (hero e Sobre),
+os 3 registros clinicos na galeria, e a recepcao na Localizacao. Isso e o teto do que da
+para fazer com o material atual, e e a razao principal de a pagina parecer curta.
+
+O que pedir ao Dr. Adzo, em ordem de impacto:
+1. **Fotos do consultorio** — sala clinica, equipamento, cadeira, fachada, sala de espera.
+   Sao as que mais reduzem ansiedade: o paciente quer saber onde vai sentar.
+2. **Mais registros clinicos** de antes/depois, com autorizacao — alimentam a galeria,
+   que hoje tem so 3 e nao rola direito.
+3. **Retratos alternativos** — ele atendendo, explicando radiografia, em pe na recepcao.
+   Um retrato unico usado em duas secoes fica repetitivo.
+4. **Logo em vetor** (SVG ou AI) — hoje a marca so existe como marca-d'agua em JPG.
+
+Ate isso chegar, a densidade da pagina vem de texto e estrutura, nao de imagem —
+por isso o FAQ, o passo a passo da primeira consulta e o quiz carregam tanto peso.
 
 ## Quando o conteudo pendente chegar
 
