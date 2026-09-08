@@ -18,12 +18,17 @@ export const site = {
   instagram: 'https://www.instagram.com/adzopereira/',
   instagramHandle: '@adzopereira',
 
+  header: {
+    cta: 'Agendar avaliação',
+  },
+
   hero: {
     titulo: 'Tratamento de canal sem dor, com quem é especialista.',
     subtitulo:
       'Atendimento em Recife com foco em endodontia. Avaliação cuidadosa, explicação clara do que você tem e do que vai ser feito — antes de começar.',
     ctaPrimario: 'Falar no WhatsApp',
     ctaSecundario: 'Ver tratamentos',
+    alt: 'Dr. Adzo Pereira sorrindo, pronto para atender no consultório',
   },
 
   credenciais: [
