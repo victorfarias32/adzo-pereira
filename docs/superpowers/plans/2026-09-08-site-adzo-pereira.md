@@ -6,7 +6,7 @@
 
 **Architecture:** Site estático gerado por Astro, sem framework no cliente. O conteúdo vive num único módulo TypeScript (`src/data/site.ts`) e as paletas em `src/data/palettes.ts`; ambos alimentam as três direções, que compartilham componentes e diferem por uma prop `variant` e por CSS custom properties emitidas no layout base. Toda a interatividade é vanilla JS em `<script>` de componente (acordeão, slider antes/depois, quiz, botão flutuante). Os links de WhatsApp são gerados por uma função pura testada com Vitest.
 
-**Tech Stack:** Astro 5, TypeScript, Vitest, linkedom (asserções sobre o HTML gerado), `astro:assets`/sharp (otimização de imagem), `@astrojs/sitemap`, GitHub Actions + GitHub Pages.
+**Tech Stack:** Astro 7, TypeScript 7, Vitest 5, linkedom (asserções sobre o HTML gerado), `astro:assets`/sharp (otimização de imagem), `@astrojs/sitemap`, GitHub Actions + GitHub Pages.
 
 **Spec:** `docs/superpowers/specs/2026-09-08-site-adzo-pereira-design.md`
 
