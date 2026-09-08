@@ -1264,7 +1264,9 @@ git commit -m "feat: header, hero, faixa de credenciais e bloco de urgência"
 
 **Interfaces:**
 - Consumes: `site.tratamentos`, `site.quiz`, `whatsappLinkTratamento`, `whatsappLinkQuiz`
-- Produces: componentes com prop `{ variant: Variant }`
+- Produces: `Tratamentos.astro` com prop `{ variant: Variant }`; `Quiz.astro` **sem props**
+
+**Regra de prop `variant`:** só recebe `variant` o componente que tem CSS por direção. O Quiz usa apenas tokens, então não recebe. Não adicione a prop "por simetria" — prop não usada é ruído que o revisor vai marcar.
 
 - [ ] **Step 1: Criar `src/components/Tratamentos.astro`**
 
@@ -1417,7 +1419,7 @@ git commit -m "feat: seção de tratamentos e quiz de sintomas com CTA dinâmico
 
 **Interfaces:**
 - Consumes: `site.resultados`, `site.sobre`, `site.primeiraConsulta`; imagens em `src/assets/`
-- Produces: componentes com prop `{ variant: Variant }`
+- Produces: `Resultados.astro` com prop `{ variant: Variant }` (tem CSS por direção); `Sobre.astro` e `PrimeiraConsulta.astro` **sem props**
 
 - [ ] **Step 1: Criar `src/components/Resultados.astro`**
 
@@ -1427,6 +1429,10 @@ As três fotos já são imagens compostas (antes em cima, depois embaixo), entã
 ---
 import { Image } from 'astro:assets';
 import { site } from '../data/site';
+import type { Variant } from '../data/palettes';
+
+interface Props { variant: Variant }
+const { variant } = Astro.props;
 
 const imagens = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/caso-*.jpg',
@@ -1437,7 +1443,7 @@ const casos = site.resultados.casos.map((c) => ({
   src: imagens[`../assets/${c.arquivo}`].default,
 }));
 ---
-<section id="resultados" class="secao">
+<section id="resultados" class:list={['secao', `v-${variant}`]}>
   <div class="container">
     <p class="olho">Prova de trabalho</p>
     <h2>{site.resultados.titulo}</h2>
@@ -1804,7 +1810,7 @@ const { variant } = Astro.props;
   <Urgencia />
   <Tratamentos variant={variant} />
   <Quiz />
-  <Resultados />
+  <Resultados variant={variant} />
   <Sobre />
   <PrimeiraConsulta />
   <Faq />
