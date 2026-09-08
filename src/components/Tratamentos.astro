@@ -8,15 +8,15 @@ const { variant } = Astro.props;
 ---
 <section id="tratamentos" class:list={['secao', `v-${variant}`]}>
   <div class="container">
-    <p class="olho">O que eu faço</p>
-    <h2>Tratamentos</h2>
+    <p class="olho">{site.secoes.tratamentos.olho}</p>
+    <h2>{site.secoes.tratamentos.titulo}</h2>
     <div class="grade">
       {site.tratamentos.map((t) => (
         <article class:list={['card', { destaque: t.destaque }]}>
           <h3>{t.nome}</h3>
           <p>{t.descricao}</p>
           <a href={whatsappLinkTratamento(t.nome)} target="_blank" rel="noopener">
-            Falar sobre {t.nome.toLowerCase()}
+            {t.cta}
             <span aria-hidden="true">→</span>
           </a>
         </article>

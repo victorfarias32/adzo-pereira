@@ -3,6 +3,7 @@ export interface Tratamento {
   nome: string;
   descricao: string;
   destaque: boolean;
+  cta: string;
 }
 
 export interface ItemFaq {
@@ -20,6 +21,31 @@ export const site = {
 
   header: {
     cta: 'Agendar avaliação',
+  },
+
+  /** Textos de moldura de seção (olho, título, CTA, rótulos) para seções cujo
+   *  namespace principal já é ocupado por outra coisa (ex.: um array de itens)
+   *  ou que não tinham campo próprio para esse texto. */
+  secoes: {
+    tratamentos: {
+      olho: 'O que eu faço',
+      titulo: 'Tratamentos',
+    },
+    resultados: {
+      olho: 'Prova de trabalho',
+      ariaLabel: 'Galeria de casos clínicos',
+    },
+    sobre: {
+      olho: 'Sobre',
+      rotulos: {
+        registro: 'Registro',
+        atuacao: 'Atuação',
+        formacao: 'Formação',
+      },
+    },
+    primeiraConsulta: {
+      olho: 'Sem surpresa',
+    },
   },
 
   hero: {
@@ -52,6 +78,7 @@ export const site = {
       descricao:
         'Remoção da polpa inflamada ou infectada, limpeza e selamento do canal. Feito sob anestesia, com radiografia em cada etapa para acompanhar o resultado.',
       destaque: true,
+      cta: 'Falar sobre tratamento de canal',
     },
     {
       id: 'retratamento',
@@ -59,6 +86,7 @@ export const site = {
       descricao:
         'Para dentes que já passaram por canal e voltaram a incomodar. Reabertura, nova limpeza e novo selamento do sistema de canais.',
       destaque: false,
+      cta: 'Falar sobre retratamento endodôntico',
     },
     {
       id: 'urgencia',
@@ -66,6 +94,7 @@ export const site = {
       descricao:
         'Atendimento para quadros de dor aguda, abscesso ou trauma. O foco é aliviar a dor primeiro e planejar o tratamento em seguida.',
       destaque: false,
+      cta: 'Falar sobre urgência e dor de dente',
     },
     {
       id: 'clareamento',
@@ -73,6 +102,7 @@ export const site = {
       descricao:
         'Clareamento supervisionado, com avaliação prévia da sensibilidade e do tipo de mancha, em consultório ou com moldeira para uso em casa.',
       destaque: false,
+      cta: 'Falar sobre clareamento dental',
     },
     {
       id: 'restauracao',
@@ -80,6 +110,7 @@ export const site = {
       descricao:
         'Devolve forma e função ao dente com resina, respeitando a cor e a anatomia original. Indicada após cárie, fratura ou desgaste.',
       destaque: false,
+      cta: 'Falar sobre restauração dentária',
     },
   ] as Tratamento[],
 
