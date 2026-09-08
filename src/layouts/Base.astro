@@ -19,9 +19,17 @@ const vars = Object.entries(p.tokens)
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og-image.jpg', Astro.site).href;
 
+/** Fontes baixadas para public/fonts/ — servidas pelo próprio site, sem CDN. */
+const FONTES_AUTO_HOSPEDADAS = new Set(['Inter', 'Bricolage Grotesque']);
+
 const fontesGoogle = [p.fontes.titulo, p.fontes.corpo]
+  .filter((f) => !FONTES_AUTO_HOSPEDADAS.has(f))
   .map((f) => `family=${f.replace(/ /g, '+')}:wght@400;500;600;700`)
   .join('&');
+
+const preloadTitulo = FONTES_AUTO_HOSPEDADAS.has(p.fontes.titulo)
+  ? `/fonts/${p.fontes.titulo.toLowerCase().replace(/ /g, '-')}-700.woff2`
+  : null;
 ---
 <!doctype html>
 <html lang="pt-BR" data-variant={variant}>
@@ -41,9 +49,17 @@ const fontesGoogle = [p.fontes.titulo, p.fontes.corpo]
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?${fontesGoogle}&display=swap`} />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-400.woff2" crossorigin />
+    {preloadTitulo && (
+      <link rel="preload" as="font" type="font/woff2" href={preloadTitulo} crossorigin />
+    )}
+    {fontesGoogle && (
+      <>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?${fontesGoogle}&display=swap`} />
+      </>
+    )}
 
     <style is:inline set:html={`:root {
     ${vars}
@@ -54,7 +70,7 @@ const fontesGoogle = [p.fontes.titulo, p.fontes.corpo]
     <SchemaDentist />
   </head>
   <body>
-    <a href="#conteudo" class="sr-only">Pular para o conteúdo</a>
+    <a href="#conteudo" class="sr-only pular-conteudo">Pular para o conteúdo</a>
     <slot />
   </body>
 </html>
