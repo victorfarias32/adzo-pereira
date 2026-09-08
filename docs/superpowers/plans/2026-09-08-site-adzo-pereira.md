@@ -1037,11 +1037,60 @@ describe('SEO e head', () => {
 Run: `npm run test:build`
 Expected: FAIL — `ENOENT: dist/prototipo/a/index.html`. As páginas só existem na Task 9. **Isso é esperado.** Anote e siga; este teste passa a valer a partir da Task 9.
 
+- [ ] **Step 7: Criar o esqueleto de página e as três rotas**
+
+Isto existe para o site **renderizar desde já**. Cada task seguinte pluga a sua seção aqui e o resultado aparece no ar no push seguinte, em vez de tudo surgir de uma vez no fim.
+
+`src/components/Pagina.astro` — por enquanto só a casca. As Tasks 5 a 8 acrescentam imports e usos, nesta ordem exata:
+
+```astro
+---
+import type { Variant } from '../data/palettes';
+
+interface Props { variant: Variant }
+const { variant } = Astro.props;
+---
+<main id="conteudo">
+  <!-- Task 5: Header, Hero, Credenciais, Urgencia -->
+  <!-- Task 6: Tratamentos, Quiz -->
+  <!-- Task 7: Resultados, Sobre, PrimeiraConsulta -->
+  <!-- Task 8: Faq, Localizacao, Rodape, WhatsFlutuante -->
+  <p style="padding:4rem 1.5rem;text-align:center;color:var(--c-muted)">
+    Direção <strong>{variant.toUpperCase()}</strong> — seções em construção.
+  </p>
+</main>
+```
+
+`src/pages/prototipo/a.astro`:
+
+```astro
+---
+import Base from '../../layouts/Base.astro';
+import Pagina from '../../components/Pagina.astro';
+---
+<Base
+  variant="a"
+  titulo="Dr. Adzo Pereira — Endodontista em Recife | Tratamento de Canal"
+  descricao="Especialista em endodontia em Recife. Tratamento de canal, retratamento e atendimento de urgência para dor de dente. CRO-PE 15853. Agende pelo WhatsApp."
+>
+  <Pagina variant="a" />
+</Base>
+```
+
+`src/pages/prototipo/b.astro` — o mesmo arquivo com `variant="b"` nos dois lugares (o atributo do `<Base>` e o do `<Pagina>`). `src/pages/prototipo/c.astro` — idem com `variant="c"`.
+
+Substitua também `src/pages/index.astro`, que hoje é a página temporária "Em construção" da Task 1, pelo índice das três direções. O código completo dele está na Task 9, Step 3 — copie-o de lá.
+
+- [ ] **Step 8: Verificar que as quatro rotas sobem**
+
+Run: `npm run build`
+Expected: 4 páginas construídas (`/`, `/prototipo/a`, `/prototipo/b`, `/prototipo/c`). Abra cada uma com `npm run preview` e confirme que as três direções já se distinguem por cor e tipografia, mesmo sem conteúdo.
+
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/layouts src/styles src/components/SchemaDentist.astro vitest.build.config.ts tests/build
-git commit -m "feat: layout base com tokens por direção, SEO local e JSON-LD Dentist"
+git add src/layouts src/styles src/components vitest.build.config.ts tests/build src/pages
+git commit -m "feat: layout base, tokens por direção, SEO e as três rotas de protótipo"
 ```
 
 ---
@@ -1250,6 +1299,34 @@ npm run dev
 
 Crie um `src/pages/teste.astro` provisório que renderize `Base` com `variant="a"` e os quatro componentes; abra `http://localhost:4321/teste` e confira que o layout responde em 375px sem scroll horizontal. Apague o arquivo depois.
 
+- [ ] **Step 6b: Plugar as seções em `Pagina.astro`**
+
+Substitua o comentário `<!-- Task 5: ... -->` pelos componentes, e mova o `<Header />` para **fora** do `<main>`, logo antes dele:
+
+```astro
+---
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Credenciais from './Credenciais.astro';
+import Urgencia from './Urgencia.astro';
+import type { Variant } from '../data/palettes';
+
+interface Props { variant: Variant }
+const { variant } = Astro.props;
+---
+<Header />
+<main id="conteudo">
+  <Hero variant={variant} />
+  <Credenciais />
+  <Urgencia />
+  <!-- Task 6: Tratamentos, Quiz -->
+  <!-- Task 7: Resultados, Sobre, PrimeiraConsulta -->
+  <!-- Task 8: Faq, Localizacao, Rodape, WhatsFlutuante -->
+</main>
+```
+
+Apague o parágrafo "seções em construção". Rode `npm run build` e confirme as 4 páginas.
+
 - [ ] **Step 7: Commit**
 
 ```bash
@@ -1405,6 +1482,17 @@ const fallback = whatsappLinkQuiz([]);
 Run: `npm run dev`, abra a página de teste, marque dois sintomas, inspecione o `href` de `#quiz-cta`.
 Expected: contém `marquei%3A` seguido dos dois sintomas codificados. Desmarque tudo → volta para a mensagem genérica, sem `marquei`.
 
+- [ ] **Step 3b: Plugar em `Pagina.astro`**
+
+Acrescente os imports e substitua o comentário `<!-- Task 6: ... -->` por:
+
+```astro
+  <Tratamentos variant={variant} />
+  <Quiz />
+```
+
+Rode `npm run build` e confirme as 4 páginas.
+
 - [ ] **Step 4: Commit**
 
 ```bash
@@ -1552,6 +1640,18 @@ import { site } from '../data/site';
 ```
 
 Nota: `var(--c-accent, var(--c-primary))` porque a direção C não define `accent`.
+
+- [ ] **Step 3b: Plugar em `Pagina.astro`**
+
+Acrescente os imports e substitua o comentário `<!-- Task 7: ... -->` por:
+
+```astro
+  <Resultados variant={variant} />
+  <Sobre />
+  <PrimeiraConsulta />
+```
+
+Rode `npm run build` e confirme as 4 páginas.
 
 - [ ] **Step 4: Commit**
 
@@ -1759,6 +1859,12 @@ import { whatsappLink } from '../lib/whatsapp';
 
 Nota sobre a cor: `#25D366` é a cor de marca do WhatsApp e é intencionalmente a única cor fora da paleta em toda a página — o reconhecimento instantâneo do botão vale mais do que a coerência cromática aqui. O ícone branco sobre esse verde dá 2.1:1, abaixo de AA, mas o botão não carrega texto: a informação é o `aria-label`, que leitores de tela anunciam. Não adicione rótulo textual dentro dele.
 
+- [ ] **Step 4b: Plugar em `Pagina.astro` — a página fica completa aqui**
+
+Acrescente os imports. Substitua o comentário `<!-- Task 8: ... -->` por `<Faq />` e `<Localizacao />` **dentro** do `<main>`; ponha `<Rodape />` e `<WhatsFlutuante />` **depois** do `</main>`. O arquivo final deve ficar exatamente como a Task 9 Step 1 mostra — confira contra ela.
+
+Rode `npm run build` e confirme as 4 páginas com as 12 seções.
+
 - [ ] **Step 5: Commit**
 
 ```bash
@@ -1768,12 +1874,14 @@ git commit -m "feat: FAQ, localização, rodapé e botão flutuante de WhatsApp"
 
 ---
 
-### Task 9: Montar as 3 páginas de protótipo e o índice
+### Task 9: Fechar a composição, favicon, og-image e testes de build
+
+**As páginas já existem** desde a Task 4, e as Tasks 5 a 8 plugaram suas seções nelas. Esta task confere que a composição final está correta, cria os assets que faltam e escreve os testes que travam tudo.
 
 **Files:**
-- Create: `src/components/Pagina.astro`
-- Create: `src/pages/prototipo/a.astro`, `b.astro`, `c.astro`
-- Modify: `src/pages/index.astro` (substitui o temporário da Task 1)
+- Verify: `src/components/Pagina.astro` (criado na Task 4, preenchido pelas Tasks 5-8 — confira contra o Step 1)
+- Verify: `src/pages/prototipo/a.astro`, `b.astro`, `c.astro` (criados na Task 4)
+- Verify: `src/pages/index.astro` (criado na Task 4 — o código completo está no Step 3)
 - Create: `public/favicon.svg`, `public/og-image.jpg`
 - Test: `tests/build/seo.test.ts` (já escrito na Task 4) + `tests/build/conversao.test.ts`
 
@@ -1781,9 +1889,9 @@ git commit -m "feat: FAQ, localização, rodapé e botão flutuante de WhatsApp"
 - Consumes: todos os componentes das Tasks 5–8, `Base.astro`, `palettes`
 - Produces: `/prototipo/a`, `/prototipo/b`, `/prototipo/c` e `/`
 
-- [ ] **Step 1: Criar `src/components/Pagina.astro`**
+- [ ] **Step 1: Conferir `src/components/Pagina.astro` contra o alvo**
 
-Composição única das 12 seções, para garantir que as 3 direções nunca divirjam em conteúdo ou ordem.
+Composição única das 12 seções, para garantir que as 3 direções nunca divirjam em conteúdo ou ordem. O arquivo deve estar assim ao fim da Task 8; corrija qualquer divergência.
 
 ```astro
 ---
@@ -1822,7 +1930,7 @@ const { variant } = Astro.props;
 <WhatsFlutuante />
 ```
 
-- [ ] **Step 2: Criar as três páginas de protótipo**
+- [ ] **Step 2: Conferir as três páginas de protótipo**
 
 `src/pages/prototipo/a.astro`:
 
@@ -1874,7 +1982,7 @@ import Pagina from '../../components/Pagina.astro';
 
 As três páginas compartilham `titulo` e `descricao` de propósito: são protótipos da mesma página, e o índice está com `noindex`, então não há risco de conteúdo duplicado no Google. Quando a direção for escolhida, sobra uma só.
 
-- [ ] **Step 3: Substituir `src/pages/index.astro` pelo índice de apresentação**
+- [ ] **Step 3: Conferir `src/pages/index.astro` — o índice de apresentação**
 
 ```astro
 ---
