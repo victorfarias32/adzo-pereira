@@ -1,0 +1,24 @@
+---
+import { site } from '../data/site';
+import { whatsappLink } from '../lib/whatsapp';
+import BotaoWhats from './BotaoWhats.astro';
+---
+<section id="urgencia" class="urg secao">
+  <div class="container caixa">
+    <div>
+      <h2>{site.urgencia.titulo}</h2>
+      <p>{site.urgencia.texto}</p>
+    </div>
+    <BotaoWhats href={whatsappLink('urgencia')} tom="claro">
+      {site.urgencia.cta}
+    </BotaoWhats>
+  </div>
+</section>
+
+<style>
+  .urg { background: var(--c-primary); color: var(--c-onPrimary); }
+  .caixa { display: grid; gap: 2rem; align-items: center; }
+  @media (min-width: 800px) { .caixa { grid-template-columns: 1fr auto; gap: 3rem; } }
+  h2 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-bottom: .7rem; }
+  p { color: inherit; opacity: .92; }
+</style>

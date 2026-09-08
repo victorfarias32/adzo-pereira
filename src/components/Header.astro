@@ -1,0 +1,35 @@
+---
+import { site } from '../data/site';
+import { whatsappLink } from '../lib/whatsapp';
+---
+<header id="topo">
+  <div class="container barra">
+    <div class="marca">
+      <strong>{site.nome}</strong>
+      <span>{site.cro} · {site.cidade}</span>
+    </div>
+    <a href={whatsappLink('header')} target="_blank" rel="noopener" class="cta">
+      Agendar avaliação
+    </a>
+  </div>
+</header>
+
+<style>
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--c-surface) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .barra { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .7rem; }
+  .marca { display: flex; flex-direction: column; line-height: 1.25; }
+  .marca strong { font-family: var(--f-titulo); font-size: 1.05rem; }
+  .marca span { font-size: .72rem; color: var(--c-muted); letter-spacing: .06em; text-transform: uppercase; }
+  .cta {
+    display: inline-flex; align-items: center;
+    padding: .6rem 1.1rem; border-radius: 999px;
+    background: var(--c-primary); color: var(--c-onPrimary);
+    font-size: .9rem; font-weight: 600; text-decoration: none; white-space: nowrap;
+  }
+  @media (max-width: 480px) { .cta { font-size: .82rem; padding: .55rem .9rem; } }
+</style>

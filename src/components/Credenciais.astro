@@ -1,0 +1,27 @@
+---
+import { site } from '../data/site';
+---
+<section id="credenciais" class="faixa">
+  <ul class="container lista">
+    {site.credenciais.map((c) => (
+      <li>
+        <span class="ponto" aria-hidden="true"></span>
+        {c.rotulo}
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .faixa { background: var(--c-surfaceAlt); border-block: 1px solid var(--c-line); }
+  .lista {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 1rem clamp(1.5rem, 5vw, 3.5rem); list-style: none; padding: 1.15rem 0;
+  }
+  .lista li {
+    display: flex; align-items: center; gap: .55rem;
+    font-size: .82rem; font-weight: 600; letter-spacing: .05em;
+    text-transform: uppercase; color: var(--c-ink);
+  }
+  .ponto { width: 7px; height: 7px; border-radius: 50%; background: var(--c-primary); flex: none; }
+</style>
