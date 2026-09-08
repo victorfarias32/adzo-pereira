@@ -22,6 +22,7 @@
 - **Performance:** zero JS de framework; JS próprio total < 5 KB minificado; Lighthouse mobile ≥ 95 nas 4 categorias; LCP < 2,0s em 4G.
 - **Mobile-first:** todo layout desenhado a partir de 375px.
 - **Seções:** as 3 direções têm exatamente as mesmas 12 seções, na mesma ordem (spec §3).
+- **Toda string visível vem de `src/data/site.ts` — esta regra vence os blocos de código deste plano.** Onde a markup abaixo traz texto inline (o "olho" de uma seção, um `<h2>`, rótulos de `<dt>`, o prefixo de um CTA, "Ficou outra dúvida?", "Todos os direitos reservados"), isso é um **defeito conhecido do plano**: acrescente o campo em `site.ts` e leia de lá, em vez de copiar o literal. Padronize os campos de seção sob `site.secoes.<secao>` com as chaves que fizerem sentido (`olho`, `titulo`, `cta`, `rotulos`). O motivo não é estética: o teste de conformidade CFO em `tests/unit/site.test.ts` varre **apenas** `site.ts`, então qualquer copy que more num componente é copy sem guarda legal nenhuma.
 - **Commits:** mensagens em português, prefixo convencional (`feat:`, `test:`, `chore:`, `docs:`, `style:`).
 
 ---
