@@ -2,8 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://victorfarias32.github.io',
-  base: '/adzo-pereira',
+  site: 'https://adzo-pereira.vercel.app',
   compressHTML: true,
   integrations: [sitemap()],
   build: { inlineStylesheets: 'always' },
