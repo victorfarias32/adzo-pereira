@@ -1,0 +1,32 @@
+---
+import { site } from '../data/site';
+---
+<section id="primeira-consulta" class="secao">
+  <div class="container">
+    <p class="olho">{site.secoes.primeiraConsulta.olho}</p>
+    <h2>{site.primeiraConsulta.titulo}</h2>
+    <ol class="passos">
+      {site.primeiraConsulta.passos.map((p) => (
+        <li>
+          <span class="num" aria-hidden="true">{p.numero}</span>
+          <h3>{p.titulo}</h3>
+          <p>{p.texto}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .olho { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c-muted); }
+  h2 { font-size: clamp(1.9rem, 5vw, 2.9rem); margin: .5rem 0 2.5rem; }
+  .passos {
+    list-style: none; padding: 0; display: grid; gap: 1.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    counter-reset: passo;
+  }
+  .passos li { border-top: 2px solid var(--c-primary); padding-top: 1.25rem; }
+  .num { display: block; font-family: var(--f-titulo); font-size: 2.4rem; color: var(--c-accent, var(--c-primary)); line-height: 1; margin-bottom: .6rem; }
+  .passos h3 { font-size: 1.15rem; margin-bottom: .5rem; }
+  .passos p { color: var(--c-muted); font-size: .95rem; }
+</style>

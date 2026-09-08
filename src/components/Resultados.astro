@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import type { Variant } from '../data/palettes';
+
+interface Props { variant: Variant }
+const { variant } = Astro.props;
+
+const imagens = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/caso-*.jpg',
+  { eager: true },
+);
+const casos = site.resultados.casos.map((c) => ({
+  ...c,
+  src: imagens[`../assets/${c.arquivo}`].default,
+}));
+---
+<section id="resultados" class:list={['secao', `v-${variant}`]}>
+  <div class="container">
+    <p class="olho">{site.secoes.resultados.olho}</p>
+    <h2>{site.resultados.titulo}</h2>
+    <div class="trilho" role="region" aria-label={site.secoes.resultados.ariaLabel} tabindex="0">
+      {casos.map((c) => (
+        <figure>
+          <Image src={c.src} alt={c.alt} widths={[380, 620]} sizes="(max-width: 700px) 82vw, 380px" loading="lazy" />
+        </figure>
+      ))}
+    </div>
+    <p class="legenda">{site.resultados.legenda}</p>
+  </div>
+</section>
+
+<style>
+  .olho { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c-muted); }
+  h2 { font-size: clamp(1.9rem, 5vw, 2.9rem); margin: .5rem 0 2rem; }
+  .trilho {
+    display: grid; grid-auto-flow: column; grid-auto-columns: min(82vw, 380px);
+    gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+    padding-bottom: 1rem; scrollbar-width: thin;
+  }
+  .trilho > figure { scroll-snap-align: start; margin: 0; }
+  .trilho img { border-radius: .9rem; width: 100%; }
+  .legenda { font-size: .84rem; color: var(--c-muted); font-style: italic; margin-top: 1rem; max-width: 62ch; }
+  .v-c .trilho img { border-radius: 1.5rem; }
+</style>

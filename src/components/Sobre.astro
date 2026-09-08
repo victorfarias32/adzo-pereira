@@ -1,0 +1,36 @@
+---
+import { Image } from 'astro:assets';
+import retrato from '../assets/dr-adzo-retrato.jpg';
+import { site } from '../data/site';
+
+const { rotulos } = site.secoes.sobre;
+---
+<section id="sobre" class="secao sobre">
+  <div class="container grade">
+    <Image src={retrato} alt={site.sobre.alt} widths={[380, 640]}
+           sizes="(max-width: 800px) 88vw, 380px" loading="lazy" class="foto" />
+    <div>
+      <p class="olho">{site.secoes.sobre.olho}</p>
+      <h2>{site.sobre.titulo}</h2>
+      <p class="corpo">{site.sobre.texto}</p>
+      <ul class="dados">
+        <li><strong>{rotulos.registro}</strong>{site.cro}</li>
+        <li><strong>{rotulos.atuacao}</strong>{site.cidade}</li>
+        <li><strong>{rotulos.formacao}</strong>{site.sobre.formacao}</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sobre { background: var(--c-surfaceAlt); }
+  .grade { display: grid; gap: clamp(2rem, 5vw, 3.5rem); align-items: center; }
+  @media (min-width: 801px) { .grade { grid-template-columns: 380px 1fr; } }
+  .foto { border-radius: 1.1rem; width: 100%; }
+  .olho { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c-muted); }
+  h2 { font-size: clamp(1.9rem, 5vw, 2.7rem); margin: .5rem 0 1.2rem; }
+  .corpo { color: var(--c-muted); margin-bottom: 2rem; }
+  .dados { list-style: none; padding: 0; display: grid; gap: .8rem; }
+  .dados li { display: grid; gap: .15rem; border-top: 1px solid var(--c-line); padding-top: .8rem; }
+  .dados strong { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--c-muted); font-weight: 600; }
+</style>
