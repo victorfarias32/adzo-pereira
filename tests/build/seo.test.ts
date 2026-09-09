@@ -38,4 +38,12 @@ describe('SEO e head', () => {
   it('exibe o CRO exigido pelo CFO', () => {
     expect(doc.body.textContent).toContain('CRO-PE 15853');
   });
+
+  it('leva noindex enquanto houver [[PENDENTE]] no conteúdo público', () => {
+    // A página buildada ainda mostra placeholders (Sobre, FAQ,
+    // Localização) — enquanto isso for verdade, o Google não pode indexar.
+    expect(doc.body.textContent).toContain('[[PENDENTE]]');
+    const robots = doc.querySelector('meta[name="robots"]');
+    expect(robots?.getAttribute('content')).toBe('noindex, nofollow');
+  });
 });

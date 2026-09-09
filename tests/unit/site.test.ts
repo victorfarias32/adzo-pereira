@@ -73,4 +73,14 @@ describe('conteúdo do site', () => {
       expect(resolver(item)).toBeUndefined();
     }
   });
+
+  it('todo marcador [[PENDENTE]] do conteúdo está registrado em site.pendentes', () => {
+    // Garante que ninguém consegue adicionar um novo placeholder ao objeto
+    // sem também listar o caminho em `pendentes` — se o número de
+    // ocorrências do marcador divergir do tamanho da lista, ou sobrou um
+    // marcador órfão (não registrado), ou sobrou um caminho registrado
+    // que não resolve mais para um marcador.
+    const ocorrencias = JSON.stringify(site).match(/\[\[PENDENTE\]\]/g) ?? [];
+    expect(ocorrencias.length).toBe(site.pendentes.length);
+  });
 });

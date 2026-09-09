@@ -250,3 +250,14 @@ export const site = {
   /** Conteúdo ainda pendente do cliente que não existe como caminho neste objeto. */
   pendentesExternos: ['depoimentos', 'logo em vetor'],
 };
+
+/**
+ * Deriva se ainda existe conteúdo pendente do cliente a partir do próprio
+ * conteúdo serializado — nunca de uma flag mantida à mão, que é exatamente
+ * o tipo de coisa que alguém esquece de desligar. Aceita um parâmetro
+ * opcional (em vez de sempre ler `site`) para permitir testar os dois
+ * estados — pendente e completo — sem precisar mutar o objeto real.
+ */
+export function temConteudoPendente(dados: unknown = site): boolean {
+  return JSON.stringify(dados).includes('[[PENDENTE]]');
+}

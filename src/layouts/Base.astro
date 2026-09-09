@@ -1,5 +1,6 @@
 ---
 import { palettes, type Variant } from '../data/palettes';
+import { temConteudoPendente } from '../data/site';
 import SchemaDentist from '../components/SchemaDentist.astro';
 import '../styles/global.css';
 
@@ -11,6 +12,9 @@ interface Props {
 
 const { variant, titulo, descricao } = Astro.props;
 const p = palettes[variant];
+
+/** Enquanto houver [[PENDENTE]] no conteúdo, o site não deve ser indexado. */
+const pendente = temConteudoPendente();
 
 const vars = Object.entries(p.tokens)
   .map(([nome, valor]) => `--c-${nome}: ${valor};`)
@@ -39,6 +43,7 @@ const preloadTitulo = FONTES_AUTO_HOSPEDADAS.has(p.fontes.titulo)
     <title>{titulo}</title>
     <meta name="description" content={descricao} />
     <link rel="canonical" href={canonical} />
+    {pendente && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
