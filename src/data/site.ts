@@ -56,7 +56,6 @@ export const site = {
       olho: 'Onde me encontrar',
       rotulos: {
         endereco: 'Endereço',
-        horarios: 'Horários',
         cidade: 'Cidade',
       },
       cta: 'Combinar um horário',
@@ -232,8 +231,7 @@ export const site = {
 
   localizacao: {
     titulo: 'Onde fica o consultório',
-    endereco: '[[PENDENTE]] endereço completo',
-    horarios: '[[PENDENTE]] horários de atendimento',
+    endereco: 'Avenida Conselheiro Rosa e Silva, 756 — Sala 06',
     mapaEmbed: '[[PENDENTE]] URL de embed do Google Maps',
     alt: 'Recepção do consultório do Dr. Adzo Pereira',
   },
@@ -242,8 +240,6 @@ export const site = {
   pendentes: [
     'sobre.formacao',
     'faq.3.resposta',
-    'localizacao.endereco',
-    'localizacao.horarios',
     'localizacao.mapaEmbed',
   ],
 

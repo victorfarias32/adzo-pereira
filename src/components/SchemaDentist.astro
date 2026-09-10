@@ -3,12 +3,14 @@ import { site } from '../data/site';
 import { numeroFormatado } from '../lib/whatsapp';
 
 /**
- * site.localizacao.endereco/.horarios ainda podem estar marcados como
- * [[PENDENTE]] (spec §8) — enquanto isso for verdade, omitimos os campos
- * do JSON-LD em vez de publicar o marcador como se fosse dado real.
+ * site.localizacao.endereco ainda pode estar marcado como [[PENDENTE]]
+ * (spec §8) — enquanto isso for verdade, omitimos o campo do JSON-LD em
+ * vez de publicar o marcador como se fosse dado real.
+ *
+ * Não há CEP (não informado pelo cliente) nem openingHours (o cliente
+ * pediu para não publicar horários) — nenhum dos dois deve ser emitido.
  */
 const enderecoPendente = site.localizacao.endereco.includes('[[PENDENTE]]');
-const horariosPendente = site.localizacao.horarios.includes('[[PENDENTE]]');
 
 const schema = {
   '@context': 'https://schema.org',
@@ -25,7 +27,6 @@ const schema = {
     addressRegion: 'PE',
     addressCountry: 'BR',
   },
-  ...(horariosPendente ? {} : { openingHours: site.localizacao.horarios }),
   sameAs: [site.instagram],
 };
 ---
