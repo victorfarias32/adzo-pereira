@@ -40,8 +40,8 @@ describe('SEO e head', () => {
   });
 
   it('leva noindex enquanto houver [[PENDENTE]] no conteúdo público', () => {
-    // A página buildada ainda mostra placeholders (Sobre, FAQ,
-    // Localização) — enquanto isso for verdade, o Google não pode indexar.
+    // A página buildada ainda mostra um placeholder visível (Sobre →
+    // formação) — enquanto isso for verdade, o Google não pode indexar.
     expect(doc.body.textContent).toContain('[[PENDENTE]]');
     const robots = doc.querySelector('meta[name="robots"]');
     expect(robots?.getAttribute('content')).toBe('noindex, nofollow');

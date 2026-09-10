@@ -140,9 +140,12 @@ recepção? Se sim, incluímos de volta.
 
 ## 9. Convênios atendidos
 
-**Já estava marcado como pendente no site** (`[[PENDENTE]]`) — não é uma
-invenção nova, só reforçando que ainda falta essa resposta seguir: quais
-convênios você atende, se atende algum.
+**Respondido pelo cliente:** ele não atende nenhum convênio odontológico.
+
+A pergunta "Você atende convênio?" foi removida do FAQ do site (era o item
+marcado como `[[PENDENTE]]`) em vez de responder afirmando ausência de
+convênio — o cliente pediu para tirar a pergunta, não para publicar a
+resposta "não atendo convênio".
 
 ---
 
@@ -158,4 +161,4 @@ convênios você atende, se atende algum.
 | 6 | "Prioridade de encaixe" para dor aguda | Você reserva/prioriza horário para dor aguda? |
 | 7 | Urgência cobre "abscesso ou trauma" | Você atende esses dois quadros na urgência? |
 | 8 | "Documento com foto" obrigatório | Você pede documento na recepção? |
-| 9 | Convênios atendidos | Já pendente — quais convênios, se algum? |
+| 9 | Convênios atendidos | Respondido: não atende nenhum. Pergunta removida do FAQ. |

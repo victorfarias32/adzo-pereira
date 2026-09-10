@@ -214,10 +214,6 @@ export const site = {
         'O valor depende de qual dente é e da complexidade do caso, então não existe preço único. Na avaliação eu fecho o valor com você antes de iniciar qualquer procedimento — você não começa sem saber.',
     },
     {
-      pergunta: 'Você atende convênio?',
-      resposta: '[[PENDENTE]] confirmar convênios atendidos com o Dr. Adzo.',
-    },
-    {
       pergunta: 'Estou com muita dor hoje. Consigo ser atendido?',
       resposta:
         'Me chame no WhatsApp explicando a situação que eu vejo a primeira janela possível na agenda.',
@@ -239,7 +235,6 @@ export const site = {
   /** Caminhos dentro deste objeto que ainda dependem de informação do cliente (spec §8). */
   pendentes: [
     'sobre.formacao',
-    'faq.3.resposta',
     'localizacao.mapaEmbed',
   ],
 
