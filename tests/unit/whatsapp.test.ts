@@ -3,9 +3,16 @@ import {
   whatsappLink,
   whatsappLinkTratamento,
   whatsappLinkQuiz,
+  numeroFormatado,
 } from '../../src/lib/whatsapp';
 
 const BASE = 'https://wa.me/5581998742330?text=';
+
+describe('numeroFormatado', () => {
+  it('formata o mesmo número usado no link do WhatsApp', () => {
+    expect(numeroFormatado()).toBe('+55 81 99874-2330');
+  });
+});
 
 describe('whatsappLink', () => {
   it('aponta para o número do Dr. Adzo', () => {

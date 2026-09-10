@@ -17,6 +17,9 @@ import BotaoWhats from './BotaoWhats.astro';
 
 <style>
   .urg { background: var(--c-primary); color: var(--c-onPrimary); }
+  /* O anel de foco global usa --c-primary, que é o próprio fundo desta seção
+     (contraste 1:1, WCAG 2.4.7). Substitui por uma cor que se destaca aqui. */
+  .urg :focus-visible { outline-color: var(--c-onPrimary); }
   .caixa { display: grid; gap: 2rem; align-items: center; }
   @media (min-width: 800px) { .caixa { grid-template-columns: 1fr auto; gap: 3rem; } }
   h2 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-bottom: .7rem; }

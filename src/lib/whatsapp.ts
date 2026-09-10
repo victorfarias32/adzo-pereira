@@ -4,6 +4,15 @@
  */
 const NUMERO = '5581998742330';
 
+/**
+ * Formato de exibição do número (ex.: em JSON-LD). Deriva sempre de NUMERO
+ * para que este arquivo continue sendo a única fonte de verdade — mesmo
+ * para consumidores que precisam do número formatado, não do link wa.me.
+ */
+export function numeroFormatado(): string {
+  return `+55 ${NUMERO.slice(2, 4)} ${NUMERO.slice(4, 9)}-${NUMERO.slice(9)}`;
+}
+
 export type CtaOrigin =
   | 'header'
   | 'hero'
@@ -26,7 +35,7 @@ const MENSAGENS: Record<CtaOrigin, string> = {
     'Olá, Dr. Adzo! Estou com dor de dente e preciso de atendimento com urgência.',
   faq: 'Olá, Dr. Adzo! Li as perguntas frequentes do site e ficou uma dúvida.',
   localizacao:
-    'Olá, Dr. Adzo! Vi o endereço e os horários no site e quero combinar um horário.',
+    'Olá, Dr. Adzo! Vim pelo site e quero combinar um horário de atendimento.',
   rodape: 'Olá, Dr. Adzo! Vim pelo site e tenho uma dúvida.',
 };
 

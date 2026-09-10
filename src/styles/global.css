@@ -57,7 +57,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 5rem; }
 body {
   font-family: var(--f-corpo), system-ui, -apple-system, sans-serif;
   background: var(--c-surface);
@@ -65,7 +65,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-h1, h2, h3 { font-family: var(--f-titulo), Georgia, serif; line-height: 1.15; text-wrap: balance; }
+h1, h2, h3 { font-family: var(--f-titulo), system-ui, -apple-system, sans-serif; line-height: 1.15; text-wrap: balance; }
 p { text-wrap: pretty; max-width: 65ch; }
 img, picture, svg { display: block; max-width: 100%; height: auto; }
 a { color: inherit; }

@@ -35,7 +35,7 @@ const { olho, titulo, mais, cta } = site.secoes.faq;
   summary::-webkit-details-marker { display: none; }
   summary::after {
     content: '+'; font-size: 1.5rem; line-height: 1;
-    color: var(--c-primary); transition: transform .2s ease; flex: none;
+    color: var(--c-terracottaTexto, var(--c-primary)); transition: transform .2s ease; flex: none;
   }
   details[open] summary::after { transform: rotate(45deg); }
   .resposta { padding-bottom: 1.3rem; }

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { parseHTML } from 'linkedom';
+import { site } from '../../src/data/site';
 
 function doc() {
   return parseHTML(readFileSync('dist/index.html', 'utf-8')).document;
@@ -54,6 +55,16 @@ describe('estratégia de conversão', () => {
 
   it('tem exatamente um h1', () => {
     expect(doc().querySelectorAll('h1').length).toBe(1);
+  });
+
+  it('publica o aviso do quiz (disclaimer exigido pelo CFO) no HTML final', () => {
+    // Valida o data object não basta: alguém poderia apagar {site.quiz.aviso}
+    // do template e a suíte de unidade continuaria verde.
+    expect(doc().body.textContent).toContain(site.quiz.aviso);
+  });
+
+  it('publica a legenda de resultados (disclaimer exigido pelo CFO) no HTML final', () => {
+    expect(doc().body.textContent).toContain(site.resultados.legenda);
   });
 
   it('o número de WhatsApp aparece só em whatsapp.ts no código-fonte', () => {

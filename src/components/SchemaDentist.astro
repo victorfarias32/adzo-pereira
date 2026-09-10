@@ -1,5 +1,14 @@
 ---
 import { site } from '../data/site';
+import { numeroFormatado } from '../lib/whatsapp';
+
+/**
+ * site.localizacao.endereco/.horarios ainda podem estar marcados como
+ * [[PENDENTE]] (spec §8) — enquanto isso for verdade, omitimos os campos
+ * do JSON-LD em vez de publicar o marcador como se fosse dado real.
+ */
+const enderecoPendente = site.localizacao.endereco.includes('[[PENDENTE]]');
+const horariosPendente = site.localizacao.horarios.includes('[[PENDENTE]]');
 
 const schema = {
   '@context': 'https://schema.org',
@@ -7,14 +16,16 @@ const schema = {
   name: site.nome,
   description: `${site.titulo}. ${site.cro}.`,
   medicalSpecialty: 'Endodontic',
-  telephone: '+55 81 99874-2330',
+  telephone: numeroFormatado(),
   areaServed: 'Recife, PE, Brasil',
   address: {
     '@type': 'PostalAddress',
+    ...(enderecoPendente ? {} : { streetAddress: site.localizacao.endereco }),
     addressLocality: 'Recife',
     addressRegion: 'PE',
     addressCountry: 'BR',
   },
+  ...(horariosPendente ? {} : { openingHours: site.localizacao.horarios }),
   sameAs: [site.instagram],
 };
 ---
